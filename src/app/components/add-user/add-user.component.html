@@ -1,0 +1,66 @@
+<div class="button-container">
+  <button (click)="toggleForm()">Add user</button>
+</div>
+
+<form
+  [formGroup]="userForm"
+  (ngSubmit)="onSubmit()"
+  class="form-container"
+  *ngIf="showForm"
+>
+  <div class="form-field">
+    <label for="name">Name</label>
+    <input id="name" formControlName="name" type="text" />
+  </div>
+
+  <div class="form-field">
+    <label for="email">Email</label>
+    <input id="email" formControlName="email" type="email" />
+  </div>
+
+  <div class="form-field">
+    <label for="password">Password</label>
+    <input id="password" formControlName="password" type="password" />
+  </div>
+
+  <div class="form-field">
+    <label for="roleId">Role</label>
+    <select id="roleId" formControlName="roleId">
+      <option [value]="1">Admin</option>
+      <option [value]="2">User</option>
+    </select>
+  </div>
+
+  <div class="form-field">
+    <label for="companyId">Company ID</label>
+    <input id="companyId" formControlName="companyId" type="number" />
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
+
+<table class="user-table" *ngIf="users?.length">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.password }}</td>
+      <td>{{ user.roleId === 1 ? "Admin" : "User" }}</td>
+      <td>
+        <i class="pi pi-pencil" (click)="edit('Edit', user)"></i>
+        <i class="pi pi-trash" (click)="delete(user.id)"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,77 @@
+<div class="button-container">
+  <button (click)="toggleForm()">Add company</button>
+</div>
+
+<!-- Company Form -->
+<div class="form-wrapper" *ngIf="showForm">
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <label>
+      Company Name:
+      <input formControlName="name" />
+    </label>
+    <!-- <label>
+      Email:
+      <input formControlName="email" type="email" />
+    </label>
+    <label>
+      Phone:
+      <input formControlName="phone" />
+    </label>
+    <label>
+      Rate:
+      <input formControlName="rate" type="number" />
+    </label>
+    <label>
+      SSN:
+      <input formControlName="ssn" />
+    </label>
+    <label>
+      Rate Type:
+      <select formControlName="rate_type">
+        <option value="FIXED">FIXED</option>
+        <option value="INTER/INTRA">INTER/INTRA</option>
+      </select>
+    </label>
+    <label>
+      Type:
+      <select formControlName="type">
+        <option value="CUSTOMER">CUSTOMER</option>
+        <option value="VENDOR">VENDOR</option>
+      </select>
+    </label> -->
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<!-- Company Table -->
+<table class="company-table" *ngIf="companies?.length">
+  <thead>
+    <tr>
+      <th>Company ID</th>
+      <th>Company Name</th>
+      <th>Actions</th>
+      <!-- <th>Type</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Rate</th>
+      <th>SSN</th>
+      <th>Rate Type</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let company of companies">
+      <td>{{ company.id }}</td>
+      <td>{{ company.name }}</td>
+      <td>
+        <i class="pi pi-pencil" (click)="edit('Edit', company)"></i>
+        <i class="pi pi-trash" (click)="delete(company.id)"></i>
+      </td>
+      <!-- <td>{{ company.type }}</td>
+      <td>{{ company.email }}</td>
+      <td>{{ company.phone }}</td>
+      <td>{{ company.rate }}</td>
+      <td>{{ company.ssn }}</td>
+      <td>{{ company.rate_type }}</td> -->
+    </tr>
+  </tbody>
+</table>

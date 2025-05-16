@@ -1,0 +1,10 @@
+<div class="button-container">
+  <button *ngIf="company_permission" (click)="toggleForm('company')">
+    Add company
+  </button>
+  <button *ngIf="user_permission" (click)="toggleForm('user')">Add user</button>
+  <button (click)="logOut()" style="background-color: #f82424">Log out</button>
+</div>
+
+<app-add-company *ngIf="showCompany"></app-add-company>
+<app-add-user *ngIf="showUser"></app-add-user>
