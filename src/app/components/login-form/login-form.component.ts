@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
 })
+
 export class LoginFormComponent {
   loginForm!: FormGroup;
   showCompany: boolean = false;
@@ -33,6 +34,8 @@ export class LoginFormComponent {
   }
 
   relatedCompanies() {
+    console.log('relatedCompanies');
+    
     if (this.loginForm?.value?.email) {
       this.apiService.getRelatedCompanies(this.loginForm.value.email).subscribe(
         (response) => {

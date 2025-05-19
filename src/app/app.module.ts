@@ -10,8 +10,9 @@ import { MessageService } from 'primeng/api';
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
-import { HomeComponent } from './components/home/home.component';
+import { HeaderComponent } from './components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutComponent } from './components/layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AddCompanyComponent,
     AddUserComponent,
     LoginFormComponent,
-    HomeComponent,
+    HeaderComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,

@@ -1,77 +1,100 @@
-<div class="button-container">
-  <button (click)="toggleForm()">Add company</button>
+<!-- Add Company Button -->
+<div class="d-flex justify-content-end my-4">
+  <button class="btn btn-primary rounded-pill px-4" (click)="toggleForm()">
+    <i class="bi bi-plus-circle me-2"></i> Add Company
+  </button>
 </div>
 
 <!-- Company Form -->
-<div class="form-wrapper" *ngIf="showForm">
-  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-    <label>
-      Company Name:
-      <input formControlName="name" />
-    </label>
-    <!-- <label>
-      Email:
-      <input formControlName="email" type="email" />
-    </label>
-    <label>
-      Phone:
-      <input formControlName="phone" />
-    </label>
-    <label>
-      Rate:
-      <input formControlName="rate" type="number" />
-    </label>
-    <label>
-      SSN:
-      <input formControlName="ssn" />
-    </label>
-    <label>
-      Rate Type:
-      <select formControlName="rate_type">
-        <option value="FIXED">FIXED</option>
-        <option value="INTER/INTRA">INTER/INTRA</option>
-      </select>
-    </label>
-    <label>
-      Type:
-      <select formControlName="type">
-        <option value="CUSTOMER">CUSTOMER</option>
-        <option value="VENDOR">VENDOR</option>
-      </select>
-    </label> -->
-    <button type="submit">Save</button>
-  </form>
+<div *ngIf="showForm" class="card shadow-sm mb-4 animate__animated animate__fadeIn">
+  <div class="card-body">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Company Name</label>
+          <input formControlName="name" type="text" class="form-control" placeholder="Enter company name" />
+        </div>
+
+        <!-- Uncomment to include additional fields -->
+        <!-- 
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input formControlName="email" type="email" class="form-control" placeholder="Email address" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Phone</label>
+          <input formControlName="phone" class="form-control" placeholder="Phone number" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Rate</label>
+          <input formControlName="rate" type="number" class="form-control" placeholder="Rate" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">SSN</label>
+          <input formControlName="ssn" class="form-control" placeholder="SSN" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Rate Type</label>
+          <select formControlName="rate_type" class="form-select">
+            <option value="">Select rate type</option>
+            <option value="FIXED">Fixed</option>
+            <option value="INTER/INTRA">Inter/Intra</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Type</label>
+          <select formControlName="type" class="form-select">
+            <option value="">Select type</option>
+            <option value="CUSTOMER">Customer</option>
+            <option value="VENDOR">Vendor</option>
+          </select>
+        </div>
+        -->
+
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- Company Table -->
-<table class="company-table" *ngIf="companies?.length">
-  <thead>
-    <tr>
-      <th>Company ID</th>
-      <th>Company Name</th>
-      <th>Actions</th>
-      <!-- <th>Type</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Rate</th>
-      <th>SSN</th>
-      <th>Rate Type</th> -->
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let company of companies">
-      <td>{{ company.id }}</td>
-      <td>{{ company.name }}</td>
-      <td>
-        <i class="pi pi-pencil" (click)="edit('Edit', company)"></i>
-        <i class="pi pi-trash" (click)="delete(company.id)"></i>
-      </td>
-      <!-- <td>{{ company.type }}</td>
-      <td>{{ company.email }}</td>
-      <td>{{ company.phone }}</td>
-      <td>{{ company.rate }}</td>
-      <td>{{ company.ssn }}</td>
-      <td>{{ company.rate_type }}</td> -->
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-light">
+      <tr>
+        <th>Company ID</th>
+        <th>Company Name</th>
+        <th>Actions</th>
+        <!-- Add back if needed:
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Rate</th>
+        <th>SSN</th>
+        <th>Rate Type</th>
+        <th>Type</th>
+        -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let company of companies">
+        <td>{{ company.id }}</td>
+        <td>{{ company.name }}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="edit('Edit', company)" title="Edit">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(company.id)" title="Delete">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

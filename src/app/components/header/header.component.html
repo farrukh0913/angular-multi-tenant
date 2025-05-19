@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold text-primary" routerLink="/home">
+      <img src="assets/logo.png" alt="Logo" height="60" class="me-2" />
+      Multi-Tenant Platform
+    </a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/companies">Companies</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/users">Global Users</a>
+        </li>
+      </ul>
+      <!-- CTA Button -->
+      <form class="d-flex ms-lg-3">
+        <button class="btn btn-outline-primary rounded-pill" (click)="logOut()" type="button">
+          {{ 'Logout' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
