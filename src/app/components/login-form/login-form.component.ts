@@ -14,6 +14,8 @@ export class LoginFormComponent {
   showCompany: boolean = false;
   showUser: boolean = false;
   write_permission: boolean = true;
+  companies: any[] = [];
+  isAdmin: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -25,39 +27,78 @@ export class LoginFormComponent {
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      companyId: [0, [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const payload = { ...this.loginForm.value };
-      this.apiService.login(payload).subscribe(
+  relatedCompanies() {
+    if (this.loginForm?.value?.email) {
+      this.apiService.getRelatedCompanies(this.loginForm.value.email).subscribe(
         (response) => {
-          this.messageService.add({
-            key: 'tst',
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Login Successfull',
-          });
-          localStorage.setItem(
-            'token',
-            '7xOzv7gZOC7cWE89FdD9wQOEwtHjYZiMyJZeEaMMThdWTJSBsKKbQU5FJ0emdrlp'
-          );
-          localStorage.setItem('user', JSON.stringify(response));
-          this.route.navigate(['/home']);
+          this.companies = response;
         },
         (error) => {
           this.messageService.add({
             key: 'tst',
             severity: 'warn',
             summary: 'Warning',
-            detail: error.error.error.message,
+            detail: 'Error fetching companies',
           });
         }
       );
-    } else {
-      console.log('Form is invalid');
     }
+  }
+
+  onSubmit() {
+    if (this.loginForm.value.email === 'sadmin') {
+      delete this.loginForm.value.companyId;
+      this.apiService.userLogin(this.loginForm.value).subscribe((response) => {
+        this.messageService.add({
+          key: 'tst',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Login Successfull',
+        });
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('isSuperAdmin', 'true');
+        this.route.navigate(['/home']);
+      });
+    } else {
+      if (this.loginForm.valid) {
+        const payload = { ...this.loginForm.value };
+        this.apiService.login(payload).subscribe(
+          (response) => {
+            this.messageService.add({
+              key: 'tst',
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Login Successfull',
+            });
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(response));
+            this.route.navigate(['/home']);
+          },
+          (error) => {
+            this.messageService.add({
+              key: 'tst',
+              severity: 'warn',
+              summary: 'Warning',
+              detail: error.error.error.message,
+            });
+          }
+        );
+      } else {
+        console.log('Form is invalid');
+      }
+    }
+  }
+
+  inputValue(event: any) {
+    console.log(event.target.value);
+    event.target.value === 'sadmin'
+      ? (this.isAdmin = true)
+      : (this.isAdmin = false);
   }
 }

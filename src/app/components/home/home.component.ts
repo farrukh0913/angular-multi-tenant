@@ -22,7 +22,7 @@ export class HomeComponent {
   }
 
   logOut() {
-    localStorage.removeItem('token');
+    localStorage.clear();
     this.route.navigate(['/login']);
   }
 

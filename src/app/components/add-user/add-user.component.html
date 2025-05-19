@@ -1,3 +1,15 @@
+<div style="display: flex; align-items: center; justify-content: center">
+  <select
+    id="companyId"
+    (change)="getCompanyUsers($event)"
+    *ngIf="isSuperAdmin"
+  >
+    <option *ngFor="let company of companies" [value]="company.id">
+      {{ company.name }}
+    </option>
+  </select>
+</div>
+
 <div class="button-container">
   <button (click)="toggleForm()">Add user</button>
 </div>
@@ -45,7 +57,7 @@
       <th>Id</th>
       <th>Name</th>
       <th>Email</th>
-      <th>Password</th>
+      <!-- <th>Password</th> -->
       <th>Role</th>
       <th>Actions</th>
     </tr>
@@ -55,7 +67,7 @@
       <td>{{ user.id }}</td>
       <td>{{ user.name }}</td>
       <td>{{ user.email }}</td>
-      <td>{{ user.password }}</td>
+      <!-- <td>{{ user.password }}</td> -->
       <td>{{ user.roleId === 1 ? "Admin" : "User" }}</td>
       <td>
         <i class="pi pi-pencil" (click)="edit('Edit', user)"></i>

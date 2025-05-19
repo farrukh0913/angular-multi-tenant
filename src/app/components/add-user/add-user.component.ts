@@ -15,12 +15,17 @@ export class AddUserComponent {
   title: string = '';
   userId!: number;
   user: any;
+  isSuperAdmin: boolean = false;
+  companies: any[] = [];
+  companyId!: string;
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
     private messageService: MessageService
-  ) {}
+  ) {
+    this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
+  }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -31,15 +36,37 @@ export class AddUserComponent {
       roleId: [0, [Validators.required]],
       companyId: [0, [Validators.required]],
     });
-    this.getUsers();
+    if (!this.isSuperAdmin) this.getCompanyUsers();
+    if (this.isSuperAdmin) {
+      this.apiService.getCompanies().subscribe(
+        (response) => {
+          console.log(response);
+          this.companies = [{ name: 'Select Company', value: '' }, ...response];
+        },
+        (error) => {
+          this.messageService.add({
+            key: 'tst',
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Error fetching companies',
+          });
+        }
+      );
+    }
   }
 
-  getUsers() {
-    this.apiService.getUsers().subscribe(
+  getCompanyUsers(event?: Event) {
+    if (event) {
+      this.companyId = (event.target as HTMLSelectElement)?.value;
+    }
+
+    const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
+
+    this.apiService.getCompanyUsers(Number(id)).subscribe(
       (response) => {
         this.users = response;
         this.userForm.patchValue({
-          companyId: this.user.companyId,
+          companyId: Number(id),
         });
       },
       (error) => {
@@ -58,10 +85,9 @@ export class AddUserComponent {
       return;
     }
     const payload = { ...this.userForm.value };
-    console.log(payload);
-    console.log(payload.companyId);
     payload.roleId = Number(payload.roleId);
-    payload.companyId = Number(this.user.companyId);
+    const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
+    payload.companyId = Number(id);
     if (this.title === 'Edit') {
       payload.id = this.userId;
       this.apiService.updateCompanyUser(payload).subscribe(
@@ -104,11 +130,13 @@ export class AddUserComponent {
             summary: 'Warning',
             detail: error.error.error.message,
           });
+          this.userForm.reset();
+          this.showForm = false;
         }
       );
     }
     setTimeout(() => {
-      this.getUsers();
+      this.getCompanyUsers();
     }, 3000);
   }
 
@@ -126,7 +154,8 @@ export class AddUserComponent {
   }
 
   delete(id: number) {
-    this.apiService.deleteCompanyUser(id).subscribe(
+    const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
+    this.apiService.deleteCompanyUser(id, Number(companyId)).subscribe(
       (response) => {
         this.messageService.add({
           key: 'tst',
@@ -134,7 +163,7 @@ export class AddUserComponent {
           summary: 'Success',
           detail: 'Company user deleted successfully',
         });
-        this.getUsers();
+        this.getCompanyUsers();
       },
       (error) => {
         this.messageService.add({
@@ -148,6 +177,15 @@ export class AddUserComponent {
   }
 
   toggleForm() {
+    if (this.isSuperAdmin && !this.companyId) {
+      this.messageService.add({
+        key: 'tst',
+        severity: 'info',
+        summary: 'Info',
+        detail: 'Please select a company',
+      });
+      return;
+    }
     this.showForm = !this.showForm;
     this.userForm.get('companyId')?.disable();
   }

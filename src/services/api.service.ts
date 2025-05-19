@@ -17,6 +17,13 @@ export class ApiService {
     );
   }
 
+  userLogin(payload: any): Observable<any> {
+    return this.httpClient.post<any>(
+      `${environment.ApiUserUrl}/user/login`,
+      payload
+    );
+  }
+
   addCompany(payload: any): Observable<any> {
     console.log('Payload:', payload);
     return this.httpClient.post<any>(
@@ -56,8 +63,10 @@ export class ApiService {
     );
   }
 
-  getUsers(): Observable<any> {
-    return this.httpClient.get<any>(`${environment.ApiUserUrl}/company-users`);
+  getCompanyUsers(id: any): Observable<any> {
+    return this.httpClient.get<any>(
+      `${environment.ApiUserUrl}/company-users/${id}`
+    );
   }
 
   addCompanyUser(payload: any): Observable<any> {
@@ -75,9 +84,16 @@ export class ApiService {
     );
   }
 
-  deleteCompanyUser(id: number): Observable<any> {
+  deleteCompanyUser(id: number, companyId: number): Observable<any> {
     return this.httpClient.delete<any>(
-      `${environment.ApiUserUrl}/company-users/${id}`
+      `${environment.ApiUserUrl}/company-users/${id}/${companyId}`
+    );
+  }
+
+  getRelatedCompanies(email: string): Observable<any> {
+    return this.httpClient.post<any>(
+      `${environment.ApiUserUrl}/relatedCompanies`,
+      { email }
     );
   }
 }
