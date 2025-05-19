@@ -4,11 +4,12 @@ import { MessageService } from 'primeng/api';
 import { ApiService } from 'src/services/api.service';
 
 @Component({
-  selector: 'app-add-company',
-  templateUrl: './add-company.component.html',
-  styleUrls: ['./add-company.component.scss'],
+  selector: 'app-companies',
+  templateUrl: './companies.component.html',
+  styleUrls: ['./companies.component.scss'],
 })
-export class AddCompanyComponent {
+
+export class CompaniesComponent {
   customerForm!: FormGroup;
   companies: any[] = [];
   showForm: boolean = false;

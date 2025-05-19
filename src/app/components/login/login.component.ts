@@ -5,12 +5,12 @@ import { ApiService } from 'src/services/api.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss'],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 
-export class LoginFormComponent {
+export class LoginComponent {
   loginForm!: FormGroup;
   showCompany: boolean = false;
   showUser: boolean = false;

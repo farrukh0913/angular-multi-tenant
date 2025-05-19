@@ -16,14 +16,14 @@
   </div>
 
   <!-- Get Companies Button -->
-  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-2s" *ngIf="!isAdmin">
+  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s" *ngIf="!isAdmin">
     <button type="button" class="btn btn-outline-primary w-100" (click)="relatedCompanies()">
       Get Companies
     </button>
   </div>
 
   <!-- Company Dropdown -->
-  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-2s" *ngIf="companies.length">
+  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s" *ngIf="companies.length">
     <label for="roleId" class="form-label">Select Company</label>
     <select id="roleId" formControlName="companyId" class="form-select">
       <option *ngFor="let company of companies" [value]="company.id">
@@ -33,14 +33,14 @@
   </div>
 
   <!-- Password Field -->
-  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-3s">
+  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s">
     <label for="password" class="form-label">Password</label>
     <input id="password" formControlName="password" type="password" class="form-control"
       placeholder="Enter your password" />
   </div>
 
   <!-- Submit Button -->
-  <button type="submit" class="btn btn-primary w-100 animate__animated animate__pulse animate__delay-4s">
+  <button type="submit" class="btn btn-primary w-100 animate__animated animate__pulse animate__delay-2s">
     Submit
   </button>
 </form>

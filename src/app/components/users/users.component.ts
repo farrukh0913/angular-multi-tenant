@@ -4,11 +4,12 @@ import { MessageService } from 'primeng/api';
 import { ApiService } from 'src/services/api.service';
 
 @Component({
-  selector: 'app-add-user',
-  templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.scss'],
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
 })
-export class AddUserComponent {
+
+export class UsersComponent {
   userForm!: FormGroup;
   users: any[] = [];
   showForm: boolean = false;

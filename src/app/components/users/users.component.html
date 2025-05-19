@@ -1,0 +1,75 @@
+<div class="container py-5 animate__animated animate__fadeIn">
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-6" *ngIf="isSuperAdmin">
+      <select id="companyId" class="form-select" (change)="getCompanyUsers($event)">
+        <option *ngFor="let company of companies" [value]="company.id">
+          {{ company.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="text-center mb-4">
+    <button class="btn btn-primary" (click)="toggleForm()">Add User</button>
+  </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="showForm" class="animate__animated animate__fadeIn">
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input id="name" formControlName="name" type="text" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" formControlName="email" type="email" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" formControlName="password" type="password" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label for="roleId" class="form-label">Role</label>
+        <select id="roleId" formControlName="roleId" class="form-select">
+          <option [value]="1">Admin</option>
+          <option [value]="2">User</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="companyIdInput" class="form-label">Company ID</label>
+        <input id="companyIdInput" formControlName="companyId" type="number" class="form-control" />
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-4">Submit</button>
+    </div>
+  </form>
+
+  <table class="table table-bordered table-hover mt-5 animate__animated animate__fadeIn" *ngIf="users?.length">
+    <thead class="table-light">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.roleId === 1 ? 'Admin' : 'User' }}</td>
+        <td class="text-center">
+          <i class="pi pi-pencil text-primary me-3" style="cursor: pointer;" (click)="edit('Edit', user)"></i>
+          <i class="pi pi-trash text-danger" style="cursor: pointer;" (click)="delete(user.id)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
