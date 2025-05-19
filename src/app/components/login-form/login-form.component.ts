@@ -96,7 +96,6 @@ export class LoginFormComponent {
   }
 
   inputValue(event: any) {
-    console.log(event.target.value);
     event.target.value === 'sadmin'
       ? (this.isAdmin = true)
       : (this.isAdmin = false);
