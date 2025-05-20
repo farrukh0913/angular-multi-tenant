@@ -1,25 +1,27 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { IUser } from 'src/app/constant/shared.interface';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-
 export class HeaderComponent {
   showCompany: boolean = false;
   showUser: boolean = false;
   company_permission: Boolean = false;
   user_permission: Boolean = false;
-  user: any;
+  user: IUser | null = null;
 
   constructor(private route: Router) {}
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (this.user.privileges.includes(34)) this.company_permission = true;
-    if (this.user.privileges.includes(35)) this.user_permission = true;
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (this.user && this.user.privileges && this.user.privileges.includes(34))
+      this.company_permission = true;
+    if (this.user && this.user.privileges && this.user.privileges.includes(35))
+      this.user_permission = true;
   }
 
   logOut() {

@@ -7,25 +7,44 @@
     </a>
 
     <!-- Toggler for mobile -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Nav links -->
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li
+          *ngIf="company_permission"
+          class="nav-item"
+          routerLinkActive="active-link"
+        >
           <a class="nav-link" routerLink="/companies">Companies</a>
         </li>
-        <li class="nav-item">
+        <li
+          *ngIf="user_permission"
+          class="nav-item"
+          routerLinkActive="active-link"
+        >
           <a class="nav-link" routerLink="/users">Global Users</a>
         </li>
       </ul>
       <!-- CTA Button -->
       <form class="d-flex ms-lg-3">
-        <button class="btn btn-outline-primary rounded-pill" (click)="logOut()" type="button">
-          {{ 'Logout' }}
+        <button
+          class="btn btn-outline-primary rounded-pill"
+          (click)="logOut()"
+          type="button"
+        >
+          {{ "Logout" }}
         </button>
       </form>
     </div>

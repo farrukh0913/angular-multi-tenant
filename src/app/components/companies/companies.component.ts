@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { Company } from 'src/app/constant/shared.interface';
+import { ICompany } from 'src/app/constant/shared.interface';
 import { ApiService } from 'src/app/services/api.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-companies',
@@ -11,16 +11,15 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./companies.component.scss'],
 })
 export class CompaniesComponent {
-  companies: any[] = [];
+  companies: ICompany[] = [];
   isVisible: boolean = false;
   companyForm!: FormGroup;
-  company: Company = { name: '' };
   companyId!: number;
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
-    private messageService: MessageService,
+    private toastService: ToastService,
     private router: Router
   ) {}
 
@@ -28,7 +27,7 @@ export class CompaniesComponent {
     this.getCompanies();
     this.companyForm = this.fb.group({
       name: ['', Validators.required],
-    });  
+    });
   }
 
   getCompanies() {
@@ -36,44 +35,30 @@ export class CompaniesComponent {
       next: (response) => {
         this.companies = response;
       },
-      error: err => {
-        this.messageService.add({
-          key: 'tst',
-          severity: 'error',
-          summary: 'Error',
-          detail: err,
-        });
-      }
+      error: (err) => {
+        this.toastService.showError('Error', err);
+      },
     });
   }
 
-  delete(id: number) {
-    this.apiService.deleteCompany(id).subscribe({
-      next: () => {
-        this.messageService.add({
-          key: 'tst',
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Company deleted successfully',
-        });
-        this.getCompanies();
-      },
-      error: err => {
-        this.messageService.add({
-          key: 'tst',
-          severity: 'error',
-          summary: 'Error',
-          detail: err,
-        });
-      }
-    });
+  delete(id: number | undefined) {
+    if (id) {
+      this.apiService.deleteCompany(id).subscribe({
+        next: () => {
+          this.toastService.showSuccess('Company deleted successfully');
+          this.getCompanies();
+        },
+        error: (err) => {
+          this.toastService.showError('Error', err);
+        },
+      });
+    }
   }
 
   showDialog(id?: number, companyName?: string) {
     this.isVisible = true;
-    if (id)
-      this.companyId = id;
-      this.companyForm.get('name')?.setValue(companyName);
+    if (id) this.companyId = id;
+    this.companyForm.get('name')?.setValue(companyName);
   }
 
   onSubmit() {
@@ -84,53 +69,36 @@ export class CompaniesComponent {
     if (this.companyId) {
       this.apiService.updateCompany(this.companyId, payload).subscribe({
         next: () => {
-          this.messageService.add({
-            key: 'tst',
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Company updated successfully',
-          });
+          this.toastService.showSuccess('Company updated successfully');
           this.getCompanies();
           this.isVisible = false;
+          this.companyId = 0;
         },
-        error: err => {
-          this.messageService.add({
-            key: 'tst',
-            severity: 'error',
-            summary: 'Error',
-            detail: err,
-          });
-        }
+        error: (err) => {
+          this.toastService.showError('Error', err);
+        },
       });
     } else {
       this.apiService.addCompany(payload).subscribe({
         next: () => {
-          this.messageService.add({
-            key: 'tst',
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Company added successfully',
-          });
+          this.toastService.showSuccess('Company added successfully');
           this.getCompanies();
           this.isVisible = false;
+          this.companyId = 0;
         },
-        error: err => {
-          this.messageService.add({
-            key: 'tst',
-            severity: 'error',
-            summary: 'Error',
-            detail: err,
-          });
-        }
+        error: (err) => {
+          this.toastService.showError('Error', err);
+        },
       });
     }
   }
 
   hideDialog() {
     this.isVisible = false;
+    this.companyId = 0;
   }
 
-  navigateTo(id: number) {
+  navigateTo(id: number | undefined) {
     this.router.navigate([`users/${id}`]);
   }
 }

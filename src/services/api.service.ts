@@ -10,7 +10,6 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
   login(payload: any): Observable<any> {
-    console.log('Payload:', payload);
     return this.httpClient.post<any>(
       `${environment.ApiUserUrl}/company-users/login`,
       payload
@@ -25,7 +24,6 @@ export class ApiService {
   }
 
   addCompany(payload: any): Observable<any> {
-    console.log('Payload:', payload);
     return this.httpClient.post<any>(
       `${environment.ApiUserUrl}/companies`,
       payload
@@ -56,7 +54,6 @@ export class ApiService {
   }
 
   addRole(payload: any): Observable<any> {
-    console.log('Payload:', payload);
     return this.httpClient.post<any>(
       `${environment.ApiUserUrl}/roles`,
       payload
@@ -70,7 +67,6 @@ export class ApiService {
   }
 
   addCompanyUser(payload: any): Observable<any> {
-    console.log('Payload:', payload);
     return this.httpClient.post<any>(
       `${environment.ApiUserUrl}/company-users`,
       payload

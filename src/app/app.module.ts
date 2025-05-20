@@ -23,7 +23,7 @@ import { LayoutComponent } from './components/layout/layout.component';
     UsersComponent,
     LoginComponent,
     HeaderComponent,
-    LayoutComponent
+    LayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +34,7 @@ import { LayoutComponent } from './components/layout/layout.component';
     DialogModule,
     ButtonModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],
