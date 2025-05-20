@@ -1,67 +1,11 @@
 <!-- Add Company Button -->
 <div class="d-flex justify-content-end my-4">
-  <button class="btn btn-primary rounded-pill px-4" (click)="toggleForm()">
+  <button
+    class="btn btn-primary rounded-pill px-4"
+    (click)="navigateToCompany()"
+  >
     <i class="bi bi-plus-circle me-2"></i> Add Company
   </button>
-</div>
-
-<!-- Company Form -->
-<div *ngIf="showForm" class="card shadow-sm mb-4 animate__animated animate__fadeIn">
-  <div class="card-body">
-    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Company Name</label>
-          <input formControlName="name" type="text" class="form-control" placeholder="Enter company name" />
-        </div>
-
-        <!-- Uncomment to include additional fields -->
-        <!-- 
-        <div class="col-md-6">
-          <label class="form-label">Email</label>
-          <input formControlName="email" type="email" class="form-control" placeholder="Email address" />
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Phone</label>
-          <input formControlName="phone" class="form-control" placeholder="Phone number" />
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Rate</label>
-          <input formControlName="rate" type="number" class="form-control" placeholder="Rate" />
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">SSN</label>
-          <input formControlName="ssn" class="form-control" placeholder="SSN" />
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Rate Type</label>
-          <select formControlName="rate_type" class="form-select">
-            <option value="">Select rate type</option>
-            <option value="FIXED">Fixed</option>
-            <option value="INTER/INTRA">Inter/Intra</option>
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Type</label>
-          <select formControlName="type" class="form-select">
-            <option value="">Select type</option>
-            <option value="CUSTOMER">Customer</option>
-            <option value="VENDOR">Vendor</option>
-          </select>
-        </div>
-        -->
-
-        <div class="col-12 d-flex justify-content-end">
-          <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
-        </div>
-      </div>
-    </form>
-  </div>
 </div>
 
 <!-- Company Table -->
@@ -87,10 +31,18 @@
         <td>{{ company.id }}</td>
         <td>{{ company.name }}</td>
         <td>
-          <button class="btn btn-sm btn-outline-primary me-2" (click)="edit('Edit', company)" title="Edit">
+          <button
+            class="btn btn-sm btn-outline-primary me-2"
+            (click)="navigateToCompany(company.id, company.name)"
+            title="Edit"
+          >
             <i class="bi bi-pencil-square"></i>
           </button>
-          <button class="btn btn-sm btn-outline-danger" (click)="delete(company.id)" title="Delete">
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="delete(company.id)"
+            title="Delete"
+          >
             <i class="bi bi-trash"></i>
           </button>
         </td>
