@@ -1,8 +1,8 @@
 <div class="container py-5 animate__animated animate__fadeIn">
   <div class="row justify-content-center mb-4">
     <div class="col-md-6" *ngIf="isSuperAdmin">
-      <select id="companyId" class="form-select" (change)="getCompanyUsers($event)">
-        <option *ngFor="let company of companies" [value]="company.id">
+      <select id="companyId" class="form-select" (ngModelChange)="getCompanyUsers($event)" [(ngModel)]="selectedCompany">
+        <option *ngFor="let company of companies" [value]="company.id" [disabled]="!company.id">
           {{ company.name }}
         </option>
       </select>
@@ -10,10 +10,48 @@
   </div>
 
   <div class="text-center mb-4">
-    <button class="btn btn-primary" (click)="toggleForm()">Add User</button>
+    <button class="btn btn-primary" (click)="showDialog()">Add User</button>
   </div>
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="showForm" class="animate__animated animate__fadeIn">
+  <table class="table table-bordered table-hover mt-5 animate__animated animate__fadeIn" *ngIf="users?.length">
+    <thead class="table-light">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.roleId === 1 ? 'Admin' : 'User' }}</td>
+        <td class="text-center">
+          <i class="pi pi-pencil text-primary me-3" style="cursor: pointer;" (click)="showDialog('Edit', user)"></i>
+          <i class="pi pi-trash text-danger" style="cursor: pointer;" (click)="delete(user.id)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- User Dialog -->
+<p-dialog
+  header="{{ title ? 'Edit Company' : 'Add Company' }}"
+  [(visible)]="isVisible"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '400px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [breakpoints]="{}"
+  [styleClass]="'custom-dialog'"
+>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="row g-3 mb-3">
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
@@ -43,33 +81,24 @@
         <input id="companyIdInput" formControlName="companyId" type="number" class="form-control" />
       </div>
     </div>
+    <p-footer class="dialog-footer">
+      <div class="dialog-actions">
+        <button
+          pButton
+          type="submit"
+          label="Save"
+          class="p-button-success"
+          [disabled]="userForm.invalid"
+        ></button>
 
-    <div class="text-center">
-      <button type="submit" class="btn btn-success px-4">Submit</button>
-    </div>
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          class="p-button-secondary"
+          (click)="hideDialog()"
+        ></button>
+      </div>
+    </p-footer>
   </form>
-
-  <table class="table table-bordered table-hover mt-5 animate__animated animate__fadeIn" *ngIf="users?.length">
-    <thead class="table-light">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th class="text-center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.roleId === 1 ? 'Admin' : 'User' }}</td>
-        <td class="text-center">
-          <i class="pi pi-pencil text-primary me-3" style="cursor: pointer;" (click)="edit('Edit', user)"></i>
-          <i class="pi pi-trash text-danger" style="cursor: pointer;" (click)="delete(user.id)"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+</p-dialog>

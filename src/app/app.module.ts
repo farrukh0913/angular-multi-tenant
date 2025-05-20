@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -15,8 +15,6 @@ import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from './components/layout/layout.component';
-import { CompanyModalComponent } from './modals/company-modal/company-modal.component';
-import { UserModalComponent } from './modals/user-modal/user-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,9 +23,7 @@ import { UserModalComponent } from './modals/user-modal/user-modal.component';
     UsersComponent,
     LoginComponent,
     HeaderComponent,
-    LayoutComponent,
-    CompanyModalComponent,
-    UserModalComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +34,7 @@ import { UserModalComponent } from './modals/user-modal/user-modal.component';
     DialogModule,
     ButtonModule,
     BrowserAnimationsModule,
+    FormsModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

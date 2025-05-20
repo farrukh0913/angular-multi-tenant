@@ -13,7 +13,6 @@ export class AppComponent {
 
   ngOnInit() {
     console.log(this.isLoginRoute);
-    console.log("test");
   }
 
   get isLoginRoute(): boolean {
