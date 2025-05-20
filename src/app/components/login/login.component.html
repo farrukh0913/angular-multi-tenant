@@ -1,29 +1,57 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+<form
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()"
   class="container mt-5 p-4 border rounded shadow-sm bg-light animate__animated animate__fadeInDown"
-  style="max-width: 400px;">
+  style="max-width: 400px"
+>
   <!-- Logo Section -->
   <div class="text-center mb-4">
-    <img src="assets/logo.png" alt="Logo" height="100" class="img-fluid animate__animated animate__bounceIn" />
+    <img
+      src="assets/logo.png"
+      alt="Logo"
+      height="100"
+      class="img-fluid animate__animated animate__bounceIn"
+    />
   </div>
 
-  <h4 class="mb-4 text-center animate__animated animate__fadeInUp animate__delay-1s">Welcome!</h4>
+  <h4
+    class="mb-4 text-center animate__animated animate__fadeInUp animate__delay-1s"
+  >
+    Welcome!
+  </h4>
 
   <!-- Email Field -->
   <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" formControlName="email" type="email" class="form-control" placeholder="Enter your email"
-      (input)="inputValue($event)" />
+    <label for="email" class="form-label">Username</label>
+    <input
+      id="email"
+      formControlName="email"
+      type="email"
+      class="form-control"
+      placeholder="Enter your username"
+      (input)="inputValue($event)"
+    />
   </div>
 
   <!-- Get Companies Button -->
-  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s" *ngIf="!isAdmin">
-    <button type="button" class="btn btn-outline-primary w-100" (click)="relatedCompanies()">
+  <div
+    class="mb-3 animate__animated animate__fadeInUp animate__delay-1s"
+    *ngIf="!isAdmin"
+  >
+    <button
+      type="button"
+      class="btn btn-outline-primary w-100"
+      (click)="relatedCompanies()"
+    >
       Get Companies
     </button>
   </div>
 
   <!-- Company Dropdown -->
-  <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s" *ngIf="companies.length">
+  <div
+    class="mb-3 animate__animated animate__fadeInUp animate__delay-1s"
+    *ngIf="companies.length"
+  >
     <label for="roleId" class="form-label">Select Company</label>
     <select id="roleId" formControlName="companyId" class="form-select">
       <option *ngFor="let company of companies" [value]="company.id">
@@ -35,12 +63,20 @@
   <!-- Password Field -->
   <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s">
     <label for="password" class="form-label">Password</label>
-    <input id="password" formControlName="password" type="password" class="form-control"
-      placeholder="Enter your password" />
+    <input
+      id="password"
+      formControlName="password"
+      type="password"
+      class="form-control"
+      placeholder="Enter your password"
+    />
   </div>
 
   <!-- Submit Button -->
-  <button type="submit" class="btn btn-primary w-100 animate__animated animate__pulse animate__delay-2s">
+  <button
+    type="submit"
+    class="btn btn-primary w-100 animate__animated animate__pulse animate__delay-2s"
+  >
     Submit
   </button>
 </form>
