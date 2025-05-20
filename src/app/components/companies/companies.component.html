@@ -1,6 +1,5 @@
 <!-- Wrapper with horizontal margin -->
 <div class="mx-4">
-
   <!-- Add Company Button -->
   <div class="d-flex justify-content-end my-4">
     <button class="btn btn-primary rounded-pill px-4" (click)="showDialog()">
@@ -10,7 +9,9 @@
 
   <!-- Company Table -->
   <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle text-center animate__animated animate__fadeInUp">
+    <table
+      class="table table-bordered table-hover align-middle text-center animate__animated animate__fadeInUp"
+    >
       <thead class="table-light">
         <tr>
           <th>Company ID</th>
@@ -23,10 +24,21 @@
           <td>{{ company.id }}</td>
           <td>{{ company.name }}</td>
           <td>
-            <i class="pi pi-eye text-primary me-3" style="cursor: pointer;" (click)="navigateTo(company.id)"></i>
-            <i class="pi pi-pencil text-primary me-3" style="cursor: pointer;"
-              (click)="showDialog(company.id, company.name)"></i>
-            <i class="pi pi-trash text-danger" style="cursor: pointer;" (click)="delete(company.id)"></i>
+            <i
+              class="pi pi-eye text-primary me-3"
+              style="cursor: pointer"
+              (click)="navigateTo(company.id)"
+            ></i>
+            <i
+              class="pi pi-pencil text-primary me-3"
+              style="cursor: pointer"
+              (click)="showDialog(company.id, company.name)"
+            ></i>
+            <i
+              class="pi pi-trash text-danger"
+              style="cursor: pointer"
+              (click)="delete(company.id)"
+            ></i>
           </td>
         </tr>
       </tbody>
@@ -34,9 +46,17 @@
   </div>
 
   <!-- Company Dialog -->
-  <p-dialog header="{{ companyId ? 'Edit Company' : 'Add Company' }}" [(visible)]="isVisible" [modal]="true"
-    [closable]="false" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false" [dismissableMask]="true"
-    [breakpoints]="{}" [styleClass]="'custom-dialog animate__animated animate__fadeInDown'">
+  <p-dialog
+    header="{{ companyId ? 'Edit Company' : 'Add Company' }}"
+    [(visible)]="isVisible"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [breakpoints]="{}"
+    [styleClass]="'custom-dialog animate__animated animate__fadeInDown'"
+  >
     <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
         <div class="p-field">
@@ -46,11 +66,22 @@
       </div>
       <p-footer class="dialog-footer">
         <div class="dialog-actions">
-          <button pButton type="submit" label="Save" class="p-button-success" [disabled]="companyForm.invalid"></button>
-          <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="hideDialog()"></button>
+          <button
+            pButton
+            type="submit"
+            label="Save"
+            class="p-button-success"
+            [disabled]="companyForm.invalid"
+          ></button>
+          <button
+            pButton
+            type="button"
+            label="Cancel"
+            class="p-button-secondary"
+            (click)="hideDialog()"
+          ></button>
         </div>
       </p-footer>
     </form>
   </p-dialog>
-
 </div>

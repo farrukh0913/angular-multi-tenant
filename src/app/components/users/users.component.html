@@ -1,8 +1,17 @@
 <div class="container py-5 animate__animated animate__fadeIn">
   <div class="row justify-content-center mb-4">
     <div class="col-md-6" *ngIf="isSuperAdmin">
-      <select id="companyId" class="form-select" (ngModelChange)="getCompanyUsers($event)" [(ngModel)]="selectedCompany">
-        <option *ngFor="let company of companies" [value]="company.id" [disabled]="!company.id">
+      <select
+        id="companyId"
+        class="form-select"
+        (ngModelChange)="getCompanyUsers($event)"
+        [(ngModel)]="selectedCompany"
+      >
+        <option
+          *ngFor="let company of companies"
+          [value]="company.id"
+          [disabled]="!company.id"
+        >
           {{ company.name }}
         </option>
       </select>
@@ -13,7 +22,10 @@
     <button class="btn btn-primary" (click)="showDialog()">Add User</button>
   </div>
 
-  <table class="table table-bordered table-hover mt-5 animate__animated animate__fadeIn" *ngIf="users?.length">
+  <table
+    class="table table-bordered table-hover mt-5 animate__animated animate__fadeIn"
+    *ngIf="users?.length"
+  >
     <thead class="table-light">
       <tr>
         <th>Id</th>
@@ -28,10 +40,18 @@
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.roleId === 1 ? 'Admin' : 'User' }}</td>
+        <td>{{ user.roleId === 1 ? "Admin" : "User" }}</td>
         <td class="text-center">
-          <i class="pi pi-pencil text-primary me-3" style="cursor: pointer;" (click)="showDialog('Edit', user)"></i>
-          <i class="pi pi-trash text-danger" style="cursor: pointer;" (click)="delete(user.id)"></i>
+          <i
+            class="pi pi-pencil text-primary me-3"
+            style="cursor: pointer"
+            (click)="showDialog('Edit', user)"
+          ></i>
+          <i
+            class="pi pi-trash text-danger"
+            style="cursor: pointer"
+            (click)="delete(user.id)"
+          ></i>
         </td>
       </tr>
     </tbody>
@@ -43,8 +63,7 @@
   header="{{ title ? 'Edit Company' : 'Add Company' }}"
   [(visible)]="isVisible"
   [modal]="true"
-  [closable]="false"
-  [style]="{ width: '400px' }"
+  [style]="{ width: '490px' }"
   [draggable]="false"
   [resizable]="false"
   [dismissableMask]="true"
@@ -55,17 +74,32 @@
     <div class="row g-3 mb-3">
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
-        <input id="name" formControlName="name" type="text" class="form-control" />
+        <input
+          id="name"
+          formControlName="name"
+          type="text"
+          class="form-control"
+        />
       </div>
 
       <div class="col-md-6">
         <label for="email" class="form-label">Email</label>
-        <input id="email" formControlName="email" type="email" class="form-control" />
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          class="form-control"
+        />
       </div>
 
       <div class="col-md-6">
         <label for="password" class="form-label">Password</label>
-        <input id="password" formControlName="password" type="password" class="form-control" />
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          class="form-control"
+        />
       </div>
 
       <div class="col-md-6">
@@ -78,7 +112,12 @@
 
       <div class="col-md-6">
         <label for="companyIdInput" class="form-label">Company ID</label>
-        <input id="companyIdInput" formControlName="companyId" type="number" class="form-control" />
+        <input
+          id="companyIdInput"
+          formControlName="companyId"
+          type="number"
+          class="form-control"
+        />
       </div>
     </div>
     <p-footer class="dialog-footer">
