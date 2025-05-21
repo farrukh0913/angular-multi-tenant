@@ -14,6 +14,7 @@ export class HeaderComponent {
   user_permission: Boolean = false;
   user: IUser | null = null;
   isSuperAdmin: boolean = false;
+  permissions: number[] = [];
 
   constructor(private route: Router) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
@@ -21,6 +22,7 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user') || 'null');
+    this.permissions = this.user?.privileges || [];
     if (this.user && this.user.privileges && this.user.privileges.includes(4))
       this.company_permission = true;
     if (this.user && this.user.privileges && this.user.privileges.includes(3))

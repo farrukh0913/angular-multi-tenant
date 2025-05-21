@@ -7,6 +7,7 @@ import { CompaniesComponent } from './components/companies/companies.component';
 import { HomeComponent } from './components/home/home.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { MainInformationComponent } from './components/main-information/main-information.component';
+import { DepartmentsComponent } from './components/departments/departments.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'companies', component: CompaniesComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'departments', component: DepartmentsComponent },
       { path: 'companies/:id/users', component: UsersComponent },
       {
         path: 'companies/:companyId/user/:id',

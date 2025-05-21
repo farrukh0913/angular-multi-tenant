@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.scss'],
 })
+
 export class CompaniesComponent {
   companies: ICompany[] = [];
   isVisible: boolean = false;

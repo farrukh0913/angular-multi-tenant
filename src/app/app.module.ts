@@ -17,6 +17,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from './components/layout/layout.component';
 import { MainInformationComponent } from './components/main-information/main-information.component';
+import { HomeComponent } from './components/home/home.component';
+import { DepartmentsComponent } from './components/departments/departments.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { MainInformationComponent } from './components/main-information/main-inf
     HeaderComponent,
     LayoutComponent,
     MainInformationComponent,
+    HomeComponent,
+    DepartmentsComponent
   ],
   imports: [
     BrowserModule,
