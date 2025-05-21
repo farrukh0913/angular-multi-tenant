@@ -20,7 +20,7 @@
 
   <div class="d-flex justify-content-center my-4">
     <button class="btn btn-primary rounded-pill px-4" (click)="showDialog()">
-      <i class="bi bi-plus-circle me-2"></i> Add User
+      <i class="bi bi-plus-circle me-2"></i> Add Company User
     </button>
   </div>
 
@@ -62,7 +62,7 @@
 
 <!-- User Dialog -->
 <p-dialog
-  header="{{ title ? 'Edit User' : 'Add User' }}"
+  header="{{ title ? 'Edit Company User' : 'Add Company User' }}"
   [(visible)]="isVisible"
   (onHide)="hideDialog()"
   [modal]="true"
