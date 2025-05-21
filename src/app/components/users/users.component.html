@@ -40,6 +40,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
+          <th>Permissions</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -49,6 +50,13 @@
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.roleId === 1 ? "Admin" : "User" }}</td>
+          <td>
+            <ng-container
+              *ngFor="let name of getPermissionNames(user.privileges)"
+            >
+              <span class="badge bg-primary me-1">{{ name }}</span>
+            </ng-container>
+          </td>
           <td>
             <i
               class="pi pi-eye text-primary me-3"

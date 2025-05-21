@@ -86,3 +86,11 @@ export const PERMISSIONS = {
   READ_CUSTOMER_DOCUMENT: 56,
   WRITE_CUSTOMER_DOCUMENT: 57,
 };
+
+export const PERMISSION_LIST = [
+  { id: 1, name: 'Finance' },
+  { id: 2, name: 'Marketing' },
+  { id: 3, name: 'Sales' },
+  { id: 4, name: 'HR' },
+  { id: 5, name: 'IT' },
+];

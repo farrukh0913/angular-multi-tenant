@@ -26,27 +26,35 @@
 </div>
 
 <div class="card-grid">
-  <p-card header="Finance" *ngIf="permissions.includes(1)">
+  <p-card header="Finance" *ngIf="permissions.includes(1)" class="finance-card">
     <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit...
     </p>
   </p-card>
-  <p-card header="Marketing" *ngIf="permissions.includes(2)">
+
+  <p-card
+    header="Marketing"
+    *ngIf="permissions.includes(2)"
+    class="marketing-card"
+  >
     <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit...
     </p>
   </p-card>
-  <p-card header="Sales" *ngIf="permissions.includes(3)">
+
+  <p-card header="Sales" *ngIf="permissions.includes(3)" class="sales-card">
     <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit...
     </p>
   </p-card>
-  <p-card header="HR" *ngIf="permissions.includes(4)">
+
+  <p-card header="HR" *ngIf="permissions.includes(4)" class="hr-card">
     <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit...
     </p>
   </p-card>
-  <p-card header="IT" *ngIf="permissions.includes(5)">
+
+  <p-card header="IT" *ngIf="permissions.includes(5)" class="it-card">
     <p class="m-0">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit...
     </p>

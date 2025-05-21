@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
+import { PERMISSION_LIST } from 'src/app/constant/permission';
 
 @Component({
   selector: 'app-users',
@@ -83,6 +84,12 @@ export class UsersComponent {
         this.toastService.showError('Error', err);
       },
     });
+  }
+
+  getPermissionNames(ids: number[]): string[] {
+    return ids.map(
+      (id) => PERMISSION_LIST.find((p) => p.id === id)?.name || ''
+    );
   }
 
   onSubmit() {
