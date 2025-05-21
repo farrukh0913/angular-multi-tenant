@@ -1,0 +1,55 @@
+.main-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 20px;
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+
+      strong {
+        flex: 1;
+        color: #555;
+      }
+
+      span {
+        flex: 2;
+        word-break: break-word;
+        text-align: right;
+        color: #333;
+      }
+
+      .password {
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+.card-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 20px;
+
+  grid-template-columns: 1fr;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  p-card {
+    display: block;
+  }
+}

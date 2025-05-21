@@ -1,0 +1,54 @@
+<div class="main-grid">
+  <p-card header="User Information" subheader="Profile Summary">
+    <div class="user-info" *ngIf="user[0]">
+      <div class="info-row">
+        <strong>Name:</strong>
+        <span>{{ user[0].name }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Email:</strong>
+        <span>{{ user[0].email }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Password (hashed):</strong>
+        <span class="password">{{ user[0].password }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Company ID:</strong>
+        <span>{{ user[0].companyId }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Role:</strong>
+        <span>{{ user[0].roleId == 1 ? "Admin" : "User" }}</span>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<div class="card-grid">
+  <p-card header="Finance" *ngIf="permissions.includes(1)">
+    <p class="m-0">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    </p>
+  </p-card>
+  <p-card header="Marketing" *ngIf="permissions.includes(2)">
+    <p class="m-0">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    </p>
+  </p-card>
+  <p-card header="Sales" *ngIf="permissions.includes(3)">
+    <p class="m-0">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    </p>
+  </p-card>
+  <p-card header="HR" *ngIf="permissions.includes(4)">
+    <p class="m-0">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    </p>
+  </p-card>
+  <p-card header="IT" *ngIf="permissions.includes(5)">
+    <p class="m-0">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+    </p>
+  </p-card>
+</div>

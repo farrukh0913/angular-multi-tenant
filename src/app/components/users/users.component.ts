@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
@@ -23,12 +23,14 @@ export class UsersComponent {
   isVisible: boolean = false;
   selectedCompany!: string;
   company_id!: string | null;
+  companyName: string = '';
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
   }
@@ -44,9 +46,14 @@ export class UsersComponent {
     });
     if (!this.isSuperAdmin) this.getCompanyUsers();
     if (this.isSuperAdmin) {
-      this.apiService.get("companies").subscribe({
+      this.apiService.get('companies').subscribe({
         next: (response) => {
           this.companies = [{ name: 'Select Company', value: '' }, ...response];
+          this.companies.forEach((company) => {
+            if (Number(company.id) === Number(this.company_id)) {
+              this.companyName = company.name;
+            }
+          });
         },
         error: (err) => {
           this.toastService.showError('Error', err);
@@ -65,7 +72,7 @@ export class UsersComponent {
     if (Id) this.companyId = Id;
     const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
 
-    this.apiService.get("company-users", {id: Number(id)}).subscribe({
+    this.apiService.get('company-users', { id: Number(id) }).subscribe({
       next: (response) => {
         this.users = response;
         this.userForm.patchValue({
@@ -88,7 +95,7 @@ export class UsersComponent {
     payload.companyId = Number(id);
     if (this.title === 'Edit') {
       payload.id = this.userId;
-      this.apiService.patch("company-users", payload).subscribe({
+      this.apiService.patch('company-users', payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user updated successfully');
           this.title = '';
@@ -101,7 +108,7 @@ export class UsersComponent {
         },
       });
     } else {
-      this.apiService.post("company-users", payload).subscribe({
+      this.apiService.post('company-users', payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user added successfully');
           this.userForm.reset();
@@ -117,15 +124,17 @@ export class UsersComponent {
 
   delete(id: number | undefined) {
     const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
-    this.apiService.delete("company-users", {id: id, company_id: Number(companyId)}).subscribe({
-      next: () => {
-        this.toastService.showSuccess('Company user deleted successfully');
-        this.getCompanyUsers();
-      },
-      error: (err) => {
-        this.toastService.showError('Error', err);
-      },
-    });
+    this.apiService
+      .delete('company-users', { id: id, company_id: Number(companyId) })
+      .subscribe({
+        next: () => {
+          this.toastService.showSuccess('Company user deleted successfully');
+          this.getCompanyUsers();
+        },
+        error: (err) => {
+          this.toastService.showError('Error', err);
+        },
+      });
   }
 
   showDialog(title?: string, user?: any) {
@@ -156,5 +165,10 @@ export class UsersComponent {
     this.isVisible = false;
     this.userForm.reset();
     this.title = '';
+  }
+
+  navigateTo(id: number | undefined) {
+    const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
+    this.router.navigate([`companies/${companyId}/user/${id}`]);
   }
 }

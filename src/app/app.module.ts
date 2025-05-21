@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { MessageService } from 'primeng/api';
 import { CompaniesComponent } from './components/companies/companies.component';
 import { UsersComponent } from './components/users/users.component';
@@ -15,6 +16,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from './components/layout/layout.component';
+import { MainInformationComponent } from './components/main-information/main-information.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { LayoutComponent } from './components/layout/layout.component';
     LoginComponent,
     HeaderComponent,
     LayoutComponent,
+    MainInformationComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,7 @@ import { LayoutComponent } from './components/layout/layout.component';
     ToastModule,
     DialogModule,
     ButtonModule,
+    CardModule,
     BrowserAnimationsModule,
     FormsModule,
   ],

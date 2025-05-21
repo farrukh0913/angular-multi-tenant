@@ -13,14 +13,17 @@ export class HeaderComponent {
   company_permission: Boolean = false;
   user_permission: Boolean = false;
   user: IUser | null = null;
+  isSuperAdmin: boolean = false;
 
-  constructor(private route: Router) {}
+  constructor(private route: Router) {
+    this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
+  }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user') || 'null');
-    if (this.user && this.user.privileges && this.user.privileges.includes(34))
+    if (this.user && this.user.privileges && this.user.privileges.includes(4))
       this.company_permission = true;
-    if (this.user && this.user.privileges && this.user.privileges.includes(35))
+    if (this.user && this.user.privileges && this.user.privileges.includes(3))
       this.user_permission = true;
   }
 
