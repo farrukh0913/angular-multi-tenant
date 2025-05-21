@@ -1,4 +1,7 @@
 <div class="main-grid">
+  <span *ngIf="companyName" style="font-size: 25px; text-align: center;"><span style="font-weight: bold">Company:</span>
+    {{
+    companyName }}</span>
   <p-card header="User Information" subheader="Profile Summary">
     <div class="user-info" *ngIf="user[0]">
       <div class="info-row">
@@ -23,40 +26,38 @@
       </div>
     </div>
   </p-card>
-</div>
 
-<div class="card-grid">
-  <p-card header="Finance" *ngIf="permissions.includes(1)" class="finance-card">
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-    </p>
-  </p-card>
+  <p-card header="Accessible Departments" subheader="List of departments the user has permission to access">
+    <div class="card-grid">
+      <p-card header="Finance" *ngIf="permissions.includes(1)" class="finance-card">
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+        </p>
+      </p-card>
 
-  <p-card
-    header="Marketing"
-    *ngIf="permissions.includes(2)"
-    class="marketing-card"
-  >
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-    </p>
-  </p-card>
+      <p-card header="Marketing" *ngIf="permissions.includes(2)" class="marketing-card">
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+        </p>
+      </p-card>
 
-  <p-card header="Sales" *ngIf="permissions.includes(3)" class="sales-card">
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-    </p>
-  </p-card>
+      <p-card header="Sales" *ngIf="permissions.includes(3)" class="sales-card">
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+        </p>
+      </p-card>
 
-  <p-card header="HR" *ngIf="permissions.includes(4)" class="hr-card">
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-    </p>
-  </p-card>
+      <p-card header="HR" *ngIf="permissions.includes(4)" class="hr-card">
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+        </p>
+      </p-card>
 
-  <p-card header="IT" *ngIf="permissions.includes(5)" class="it-card">
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-    </p>
+      <p-card header="IT" *ngIf="permissions.includes(5)" class="it-card">
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+        </p>
+      </p-card>
+    </div>
   </p-card>
 </div>

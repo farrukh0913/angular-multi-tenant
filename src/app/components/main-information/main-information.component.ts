@@ -11,6 +11,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class MainInformationComponent {
   user: IUser[] = [];
   permissions: number[] = [];
+  companyName: string = '';
 
   constructor(private apiService: ApiService, private route: ActivatedRoute) {
     const userId = this.route.snapshot.paramMap.get('id');
@@ -22,6 +23,13 @@ export class MainInformationComponent {
           this.user = [data];
           this.permissions = this.user[0].privileges;
         });
+
+      this.apiService.get('companies').subscribe({
+        next: (companies) => {
+          const company = companies?.find((c: { id: any }) => c.id === +companyId) ?? null;
+          this.companyName = company?.name
+        }
+      });
     }
   }
 
