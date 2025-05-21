@@ -1,7 +1,8 @@
 <div class="main-grid">
-  <span *ngIf="companyName" style="font-size: 25px; text-align: center;"><span style="font-weight: bold">Company:</span>
-    {{
-    companyName }}</span>
+<span *ngIf="companyName" class="h5 d-flex align-items-center justify-content-center">
+  <i class="pi pi-building me-2" style="font-size: 30px; color: #0D6EFD;"></i>
+  <strong class="me-1">Company:</strong> {{ companyName }}
+</span>
   <p-card header="User Information" subheader="Profile Summary">
     <div class="user-info" *ngIf="user[0]">
       <div class="info-row">
