@@ -9,90 +9,39 @@ import { environment } from 'src/environment/environment';
 export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
-  login(payload: any): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/company-users/login`,
-      payload
-    );
+  modifyUrl(url: string, id: string | number, company_id: number) {
+    if (id) url += `/${id}`;
+    if (company_id) url += `/${company_id}`;
+    return url;
   }
 
-  userLogin(payload: any): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/user/login`,
-      payload
-    );
+  get(endpoint: string, ...ids: any): Observable<any> {
+    const {id, company_id} = ids.length ? ids[0] : [];
+    const apiUrl: string = this.modifyUrl(`${environment.ApiUserUrl}/${endpoint}`, id, company_id);
+    return this.httpClient.get<any>(apiUrl);
   }
 
-  addCompany(payload: any): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/companies`,
-      payload
-    );
+  post(endpoint: string, payload: any, ...ids: any): Observable<any> {
+    const {id, company_id} = ids.length ? ids[0] : [];
+    const apiUrl: string = this.modifyUrl(`${environment.ApiUserUrl}/${endpoint}`, id, company_id);
+    return this.httpClient.post<any>(apiUrl, payload);
   }
 
-  getCompanies(): Observable<any> {
-    return this.httpClient.get<any>(`${environment.ApiUserUrl}/companies`);
+  put(endpoint: string, payload: any, ...ids: any): Observable<any> {
+    const {id, company_id} = ids.length ? ids[0] : [];
+    const apiUrl: string = this.modifyUrl(`${environment.ApiUserUrl}/${endpoint}`, id, company_id);
+    return this.httpClient.put<any>(apiUrl, payload);
   }
 
-  getCompanyById(id: string): Observable<any> {
-    return this.httpClient.get<any>(
-      `${environment.ApiUserUrl}/companies/${id}`
-    );
+  patch(endpoint: string, payload: any, ...ids: any): Observable<any> {
+    const {id, company_id} = ids.length ? ids[0] : [];
+    const apiUrl: string = this.modifyUrl(`${environment.ApiUserUrl}/${endpoint}`, id, company_id);
+    return this.httpClient.patch<any>(apiUrl, payload);
   }
 
-  updateCompany(id: number, payload: any): Observable<any> {
-    return this.httpClient.put<any>(
-      `${environment.ApiUserUrl}/companies/${id}`,
-      payload
-    );
-  }
-
-  deleteCompany(id: number): Observable<any> {
-    return this.httpClient.delete<any>(
-      `${environment.ApiUserUrl}/companies/${id}`
-    );
-  }
-
-  addRole(payload: any): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/roles`,
-      payload
-    );
-  }
-
-  getCompanyUsers(id: any): Observable<any> {
-    return this.httpClient.get<any>(
-      `${environment.ApiUserUrl}/company-users/${id}`
-    );
-  }
-
-  addCompanyUser(payload: any): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/company-users`,
-      payload
-    );
-  }
-
-  updateCompanyUser(payload: any): Observable<any> {
-    return this.httpClient.patch<any>(
-      `${environment.ApiUserUrl}/company-users/`,
-      payload
-    );
-  }
-
-  deleteCompanyUser(
-    id: number | undefined,
-    companyId: number
-  ): Observable<any> {
-    return this.httpClient.delete<any>(
-      `${environment.ApiUserUrl}/company-users/${id}/${companyId}`
-    );
-  }
-
-  getRelatedCompanies(email: string): Observable<any> {
-    return this.httpClient.post<any>(
-      `${environment.ApiUserUrl}/relatedCompanies`,
-      { email }
-    );
+  delete(endpoint: string, ...ids: any): Observable<any> {
+    const {id, company_id} = ids.length ? ids[0] : [];
+    const apiUrl: string = this.modifyUrl(`${environment.ApiUserUrl}/${endpoint}`, id, company_id);
+    return this.httpClient.delete<any>(apiUrl);
   }
 }
