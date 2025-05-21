@@ -8,7 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LayoutComponent } from './components/layout/layout.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
 
   // Protected routes inside layout
@@ -20,7 +20,7 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'companies', component: CompaniesComponent },
       { path: 'users', component: UsersComponent },
-      { path: 'users/:id', component: UsersComponent },
+      { path: 'companies/:id/users', component: UsersComponent },
       { path: '**', redirectTo: 'home' },
     ],
   },

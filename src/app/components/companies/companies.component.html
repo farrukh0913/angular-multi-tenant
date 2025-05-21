@@ -49,6 +49,7 @@
   <p-dialog
     header="{{ companyId ? 'Edit Company' : 'Add Company' }}"
     [(visible)]="isVisible"
+    (onHide)="hideDialog()"
     [modal]="true"
     [style]="{ width: '400px' }"
     [draggable]="false"
@@ -72,13 +73,6 @@
             label="Save"
             class="p-button-success"
             [disabled]="companyForm.invalid"
-          ></button>
-          <button
-            pButton
-            type="button"
-            label="Cancel"
-            class="p-button-secondary"
-            (click)="hideDialog()"
           ></button>
         </div>
       </p-footer>

@@ -99,6 +99,6 @@ export class CompaniesComponent {
   }
 
   navigateTo(id: number | undefined) {
-    this.router.navigate([`users/${id}`]);
+    this.router.navigate([`companies/${id}/users`]);
   }
 }

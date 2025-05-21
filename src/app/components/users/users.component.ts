@@ -22,6 +22,7 @@ export class UsersComponent {
   companyId!: string;
   isVisible: boolean = false;
   selectedCompany!: string;
+  company_id!: string | null;
 
   constructor(
     private apiService: ApiService,
@@ -53,9 +54,9 @@ export class UsersComponent {
       });
     }
     // getting company id from params
-    const company_id = this.route.snapshot.paramMap.get('id');
-    if (company_id) {
-      this.selectedCompany = company_id;
+    this.company_id = this.route.snapshot.paramMap.get('id');
+    if (this.company_id) {
+      this.selectedCompany = this.company_id;
       this.getCompanyUsers(this.selectedCompany);
     }
   }
