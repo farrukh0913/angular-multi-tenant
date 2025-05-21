@@ -44,7 +44,7 @@ export class UsersComponent {
     });
     if (!this.isSuperAdmin) this.getCompanyUsers();
     if (this.isSuperAdmin) {
-      this.apiService.getCompanies().subscribe({
+      this.apiService.get("companies").subscribe({
         next: (response) => {
           this.companies = [{ name: 'Select Company', value: '' }, ...response];
         },
@@ -65,7 +65,7 @@ export class UsersComponent {
     if (Id) this.companyId = Id;
     const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
 
-    this.apiService.getCompanyUsers(Number(id)).subscribe({
+    this.apiService.get("company-users", {id: Number(id)}).subscribe({
       next: (response) => {
         this.users = response;
         this.userForm.patchValue({
@@ -88,7 +88,7 @@ export class UsersComponent {
     payload.companyId = Number(id);
     if (this.title === 'Edit') {
       payload.id = this.userId;
-      this.apiService.updateCompanyUser(payload).subscribe({
+      this.apiService.patch("company-users", payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user updated successfully');
           this.title = '';
@@ -101,7 +101,7 @@ export class UsersComponent {
         },
       });
     } else {
-      this.apiService.addCompanyUser(payload).subscribe({
+      this.apiService.post("company-users", payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user added successfully');
           this.userForm.reset();
@@ -117,7 +117,7 @@ export class UsersComponent {
 
   delete(id: number | undefined) {
     const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
-    this.apiService.deleteCompanyUser(id, Number(companyId)).subscribe({
+    this.apiService.delete("company-users", {id: id, company_id: Number(companyId)}).subscribe({
       next: () => {
         this.toastService.showSuccess('Company user deleted successfully');
         this.getCompanyUsers();

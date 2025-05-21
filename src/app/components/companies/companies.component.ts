@@ -31,7 +31,7 @@ export class CompaniesComponent {
   }
 
   getCompanies() {
-    this.apiService.getCompanies().subscribe({
+    this.apiService.get("companies").subscribe({
       next: (response) => {
         this.companies = response;
       },
@@ -43,7 +43,7 @@ export class CompaniesComponent {
 
   delete(id: number | undefined) {
     if (id) {
-      this.apiService.deleteCompany(id).subscribe({
+      this.apiService.delete("companies", {id: id}).subscribe({
         next: () => {
           this.toastService.showSuccess('Company deleted successfully');
           this.getCompanies();
@@ -67,7 +67,7 @@ export class CompaniesComponent {
     }
     const payload = { ...this.companyForm.value };
     if (this.companyId) {
-      this.apiService.updateCompany(this.companyId, payload).subscribe({
+      this.apiService.put("companies", payload, {id: this.companyId}).subscribe({
         next: () => {
           this.toastService.showSuccess('Company updated successfully');
           this.getCompanies();
@@ -79,7 +79,7 @@ export class CompaniesComponent {
         },
       });
     } else {
-      this.apiService.addCompany(payload).subscribe({
+      this.apiService.post("companies", payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company added successfully');
           this.getCompanies();
