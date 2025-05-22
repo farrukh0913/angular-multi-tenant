@@ -1,0 +1,29 @@
+import { Injectable } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SharedService {
+
+  constructor(private confirmationService: ConfirmationService) { }
+
+  deleteConfirm(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.confirmationService.confirm({
+        message: 'Do you want to delete this record?',
+        header: 'Confirmation',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
+      });
+    });
+  }
+}

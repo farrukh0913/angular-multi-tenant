@@ -40,7 +40,7 @@ export class LoginComponent {
           this.companies = response;
         },
         error: err => {
-          this.toastService.showError(err.error.error.message);
+          this.toastService.showError('Error', err.error.error.message);
           this.companies = [];
         }
       });
@@ -59,7 +59,7 @@ export class LoginComponent {
           this.route.navigate(['/home']);
         },
         error: err => {
-          this.toastService.showError(err.error.error.message);
+          this.toastService.showError('Error', err.error.error.message);
         }
       });
     } else {
@@ -77,7 +77,7 @@ export class LoginComponent {
             this.route.navigate(['/home']);
           },
           error: err => {
-            this.toastService.showError(err.error.error.message);
+            this.toastService.showError('Error', err.error.error.message);
           }
         });
       } else {

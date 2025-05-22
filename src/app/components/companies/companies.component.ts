@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ICompany } from 'src/app/constant/shared.interface';
 import { ApiService } from 'src/app/services/api.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class CompaniesComponent {
     private apiService: ApiService,
     private fb: FormBuilder,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
@@ -37,22 +39,26 @@ export class CompaniesComponent {
         this.companies = response;
       },
       error: (err) => {
-        this.toastService.showError('Error', err);
+        this.toastService.showError('Error', err.error.error.message);
       },
     });
   }
 
-  delete(id: number | undefined) {
-    if (id) {
-      this.apiService.delete("companies", {id: id}).subscribe({
-        next: () => {
-          this.toastService.showSuccess('Company deleted successfully');
-          this.getCompanies();
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err);
-        },
-      });
+  async delete(id: number | undefined) {
+    /** Confirmation */
+    const resolved = await this.sharedService.deleteConfirm();
+    if (resolved){
+      if (id) {
+        this.apiService.delete("companies", {id: id}).subscribe({
+          next: () => {
+            this.toastService.showInfo('Record deleted');
+            this.getCompanies();
+          },
+          error: (err) => {
+            this.toastService.showError('Error', err.error.error.message);
+          },
+        });
+      }
     }
   }
 
@@ -76,7 +82,7 @@ export class CompaniesComponent {
           this.companyId = 0;
         },
         error: (err) => {
-          this.toastService.showError('Error', err);
+          this.toastService.showError('Error', err.error.error.message);
         },
       });
     } else {
@@ -88,7 +94,7 @@ export class CompaniesComponent {
           this.companyId = 0;
         },
         error: (err) => {
-          this.toastService.showError('Error', err);
+          this.toastService.showError('Error', err.error.error.message);
         },
       });
     }
