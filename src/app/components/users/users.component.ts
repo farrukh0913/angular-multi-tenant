@@ -102,9 +102,10 @@ export class UsersComponent {
     payload.roleId = Number(payload.roleId);
     const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
     const companyId = Number(id);
+    this.userForm.value.companyId = Number(companyId);
     if (this.title === 'Edit') {
       payload.id = this.userId;
-      this.apiService.patch('company-users', payload).subscribe({
+      this.apiService.patch(`company-users/${companyId}`, payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user updated successfully');
           this.title = '';
@@ -117,34 +118,40 @@ export class UsersComponent {
         },
       });
     } else {
-      this.apiService.post("company-users", payload, {company_id: companyId}).subscribe({
-        next: () => {
-          this.toastService.showSuccess('Company user added successfully');
-          this.userForm.reset();
-          this.getCompanyUsers();
-          this.isVisible = false;
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err.error.error.message);
-        },
-      });
+      this.apiService
+        .post('company-users', payload, { company_id: companyId })
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess('Company user added successfully');
+            this.userForm.reset();
+            this.getCompanyUsers();
+            this.isVisible = false;
+          },
+          error: (err) => {
+            this.toastService.showError('Error', err.error.error.message);
+          },
+        });
     }
   }
 
   async delete(id: number | undefined) {
     /** Confirmation */
-    const resolved = await this.sharedService.deleteConfirm();
+    const resolved = await this.sharedService.deleteConfirm('user');
     if (resolved) {
-      const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
-      this.apiService.delete("company-users", {id: id, company_id: Number(companyId)}).subscribe({
-        next: () => {
-          this.toastService.showInfo('Record deleted');
-          this.getCompanyUsers();
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err.error.error.message);
-        },
-      });
+      const companyId = this.isSuperAdmin
+        ? this.companyId
+        : this.user.companyId;
+      this.apiService
+        .delete('company-users', { id: id, company_id: Number(companyId) })
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess('Company user deleted successfully');
+            this.getCompanyUsers();
+          },
+          error: (err) => {
+            this.toastService.showError('Error', err.error.error.message);
+          },
+        });
     }
   }
 
@@ -166,7 +173,7 @@ export class UsersComponent {
         email: user.email,
         password: user.password,
         roleId: user.roleId,
-        companyId: user.companyId,
+        companyId: this.companyId,
       });
       this.userId = user.id;
     }

@@ -1,8 +1,11 @@
 <div class="main-grid">
-<span *ngIf="companyName" class="h5 d-flex align-items-center justify-content-center">
-  <i class="pi pi-building me-2" style="font-size: 30px; color: #0D6EFD;"></i>
-  <strong class="me-1">Company:</strong> {{ companyName }}
-</span>
+  <span
+    *ngIf="companyName"
+    class="h5 d-flex align-items-center justify-content-center"
+  >
+    <i class="pi pi-building me-2" style="font-size: 30px; color: #0d6efd"></i>
+    <strong class="me-1">Company:</strong> {{ companyName }}
+  </span>
   <p-card header="User Information" subheader="Profile Summary">
     <div class="user-info" *ngIf="user[0]">
       <div class="info-row">
@@ -19,7 +22,7 @@
       </div>
       <div class="info-row">
         <strong>Company ID:</strong>
-        <span>{{ user[0].companyId }}</span>
+        <span>{{ companyId }}</span>
       </div>
       <div class="info-row">
         <strong>Role:</strong>
@@ -28,15 +31,26 @@
     </div>
   </p-card>
 
-  <p-card header="Accessible Departments" subheader="List of departments the user has permission to access">
+  <p-card
+    header="Accessible Departments"
+    subheader="List of departments the user has permission to access"
+  >
     <div class="card-grid">
-      <p-card header="Finance" *ngIf="permissions.includes(1)" class="finance-card">
+      <p-card
+        header="Finance"
+        *ngIf="permissions.includes(1)"
+        class="finance-card"
+      >
         <p class="m-0">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit...
         </p>
       </p-card>
 
-      <p-card header="Marketing" *ngIf="permissions.includes(2)" class="marketing-card">
+      <p-card
+        header="Marketing"
+        *ngIf="permissions.includes(2)"
+        class="marketing-card"
+      >
         <p class="m-0">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit...
         </p>

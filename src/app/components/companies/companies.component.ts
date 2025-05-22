@@ -11,7 +11,6 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.scss'],
 })
-
 export class CompaniesComponent {
   companies: ICompany[] = [];
   isVisible: boolean = false;
@@ -34,7 +33,7 @@ export class CompaniesComponent {
   }
 
   getCompanies() {
-    this.apiService.get("companies").subscribe({
+    this.apiService.get('companies').subscribe({
       next: (response) => {
         this.companies = response;
       },
@@ -46,12 +45,12 @@ export class CompaniesComponent {
 
   async delete(id: number | undefined) {
     /** Confirmation */
-    const resolved = await this.sharedService.deleteConfirm();
-    if (resolved){
+    const resolved = await this.sharedService.deleteConfirm('company');
+    if (resolved) {
       if (id) {
-        this.apiService.delete("companies", {id: id}).subscribe({
+        this.apiService.delete('companies', { id: id }).subscribe({
           next: () => {
-            this.toastService.showInfo('Record deleted');
+            this.toastService.showSuccess('Company deleted successfully');
             this.getCompanies();
           },
           error: (err) => {
@@ -74,19 +73,21 @@ export class CompaniesComponent {
     }
     const payload = { ...this.companyForm.value };
     if (this.companyId) {
-      this.apiService.put("companies", payload, {id: this.companyId}).subscribe({
-        next: () => {
-          this.toastService.showSuccess('Company updated successfully');
-          this.getCompanies();
-          this.isVisible = false;
-          this.companyId = 0;
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err.error.error.message);
-        },
-      });
+      this.apiService
+        .put('companies', payload, { id: this.companyId })
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess('Company updated successfully');
+            this.getCompanies();
+            this.isVisible = false;
+            this.companyId = 0;
+          },
+          error: (err) => {
+            this.toastService.showError('Error', err.error.error.message);
+          },
+        });
     } else {
-      this.apiService.post("companies", payload).subscribe({
+      this.apiService.post('companies', payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company added successfully');
           this.getCompanies();

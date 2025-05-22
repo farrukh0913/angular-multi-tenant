@@ -1,13 +1,27 @@
-/* Custom styles for PrimeNG ConfirmDialog buttons */
+/* Custom Styles for PrimeNG ConfirmDialog */
 ::ng-deep .p-confirm-dialog {
-  // Reject Button Styles
+  .p-dialog-content {
+    display: flex;
+    align-items: flex-end;
+
+    .p-confirm-dialog-icon {
+      font-size: 1.3rem;
+    }
+
+    .p-confirm-dialog-message {
+      margin-left: 0.625rem;
+    }
+  }
+
+  /* Reject Button Styles */
   .p-confirm-dialog-reject {
-    border-color: #e5e7eb;
-    background-color: #f8f9fa;
-    color: #64748b;
     height: 40px;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-    
+    background-color: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    color: #64748b;
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+      color 0.2s ease;
+
     &:hover {
       background-color: #e2e6e9;
       border-color: #e5e7eb;
@@ -15,17 +29,17 @@
     }
   }
 
-  // Accept Button Styles
+  /* Accept Button Styles */
   .p-confirm-dialog-accept {
-    border-color: #ef4444;
-    background-color: #ef4444;
-    color: #fff;
     height: 40px;
+    background-color: #ea3535;
+    border: 1px solid #ea3535;
+    color: #ffffff;
     transition: background-color 0.2s ease, border-color 0.2s ease;
-    
+
     &:hover {
-      background-color: #ea3535;
-      border-color: #ea3535;
+      background-color: #c0392b;
+      border-color: #c0392b;
     }
   }
 }

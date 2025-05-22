@@ -3,16 +3,15 @@ import { ConfirmationService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedService {
+  constructor(private confirmationService: ConfirmationService) {}
 
-  constructor(private confirmationService: ConfirmationService) { }
-
-  deleteConfirm(): Promise<boolean> {
+  deleteConfirm(text: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.confirmationService.confirm({
-        message: 'Do you want to delete this record?',
+        message: `Do you want to delete this ${text}?`,
         header: 'Confirmation',
         icon: 'pi pi-info-circle',
         rejectLabel: 'Cancel',
@@ -22,7 +21,7 @@ export class SharedService {
         },
         reject: () => {
           resolve(false);
-        }
+        },
       });
     });
   }

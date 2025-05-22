@@ -33,52 +33,48 @@ export class LoginComponent {
     });
   }
 
-  relatedCompanies() {
-    if (this.loginForm?.value?.email) {
-      this.apiService.post("relatedCompanies", {email: this.loginForm.value.email}).subscribe({
-        next: response => {
-          this.companies = response;
-        },
-        error: err => {
-          this.toastService.showError('Error', err.error.error.message);
-          this.companies = [];
-        }
-      });
-    }
-  }
+  // relatedCompanies() {
+  //   if (this.loginForm?.value?.email) {
+  //     this.apiService.post("relatedCompanies", {email: this.loginForm.value.email}).subscribe({
+  //       next: response => {
+  //         this.companies = response;
+  //       },
+  //       error: err => {
+  //         this.toastService.showError('Error', err.error.error.message);
+  //         this.companies = [];
+  //       }
+  //     });
+  //   }
+  // }
 
   onSubmit() {
     if (this.loginForm.value.email === 'sadmin') {
       delete this.loginForm.value.companyId;
-      this.apiService.post("user/login", this.loginForm.value).subscribe({
-        next: response => {
+      this.apiService.post('user/login', this.loginForm.value).subscribe({
+        next: (response) => {
           this.toastService.showSuccess('Login Successfull');
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response));
           localStorage.setItem('isSuperAdmin', 'true');
           this.route.navigate(['/home']);
         },
-        error: err => {
+        error: (err) => {
           this.toastService.showError('Error', err.error.error.message);
-        }
+        },
       });
     } else {
-      if (this.loginForm.value.companyId === 0) {
-        this.toastService.showError('Please select a company');
-        return;
-      }
       if (this.loginForm.valid) {
         const payload = { ...this.loginForm.value };
-        this.apiService.post("company-users/login", payload).subscribe({
-          next: response => {
+        this.apiService.post('company-users/login', payload).subscribe({
+          next: (response) => {
             this.toastService.showSuccess('Login Successfull');
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response));
             this.route.navigate(['/home']);
           },
-          error: err => {
+          error: (err) => {
             this.toastService.showError('Error', err.error.error.message);
-          }
+          },
         });
       } else {
         console.log('Form is invalid');
