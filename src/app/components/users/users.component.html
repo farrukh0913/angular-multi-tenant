@@ -1,33 +1,30 @@
 <div class="mx-4">
   <div class="d-flex align-items-start">
-    <span *ngIf="companyName" class="h5 d-flex align-items-center justify-content-center mt-3">
-      <i class="pi pi-building me-2" style="font-size: 30px; color: #0D6EFD;"></i>
+    <span
+      *ngIf="companyName"
+      class="h5 d-flex align-items-center justify-content-center mt-3"
+    >
+      <i
+        class="pi pi-building me-2"
+        style="font-size: 30px; color: #0d6efd"
+      ></i>
       <strong class="me-1">Company:</strong> {{ companyName }}
     </span>
   </div>
 
-
   <!-- Add Company User Button -->
-  <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-    <div class="col-md-6" *ngIf="isSuperAdmin && !company_id">
-      <select id="companyId" class="form-select" (ngModelChange)="getCompanyUsers($event)"
-        [(ngModel)]="selectedCompany">
-        <option *ngFor="let company of companies" [value]="company.id" [disabled]="!company.id">
-          {{ company.name }}
-        </option>
-      </select>
-    </div>
 
-    <div [ngClass]="{ 'ms-auto': !(isSuperAdmin && !company_id) }">
-      <button class="btn btn-primary rounded-pill px-4" (click)="showDialog()">
-        <i class="bi bi-plus-circle me-2"></i> Add Company User
-      </button>
-    </div>
+  <div class="d-flex justify-content-end align-items-center mt-4 mb-4">
+    <button class="btn btn-primary rounded-pill px-4" (click)="showDialog()">
+      <i class="bi bi-plus-circle me-2"></i> Add Company User
+    </button>
   </div>
 
   <!-- Company User Table -->
   <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle text-center animate__animated animate__fadeInUp">
+    <table
+      class="table table-bordered table-hover align-middle text-center animate__animated animate__fadeInUp"
+    >
       <thead class="table-light">
         <tr>
           <th>Id</th>
@@ -45,14 +42,28 @@
           <td>{{ user.email }}</td>
           <td>{{ user.roleId === 1 ? "Admin" : "User" }}</td>
           <td>
-            <ng-container *ngFor="let name of getPermissionNames(user.privileges)">
+            <ng-container
+              *ngFor="let name of getPermissionNames(user.privileges)"
+            >
               <span class="badge bg-primary me-1">{{ name }}</span>
             </ng-container>
           </td>
           <td>
-            <i class="pi pi-eye text-primary me-3" style="cursor: pointer" (click)="navigateTo(user.id)"></i>
-            <i class="pi pi-pencil text-primary me-3" style="cursor: pointer" (click)="showDialog('Edit', user)"></i>
-            <i class="pi pi-trash text-danger" style="cursor: pointer" (click)="delete(user.id)"></i>
+            <i
+              class="pi pi-eye text-primary me-3"
+              style="cursor: pointer"
+              (click)="navigateTo(user.id)"
+            ></i>
+            <i
+              class="pi pi-pencil text-primary me-3"
+              style="cursor: pointer"
+              (click)="showDialog('Edit', user)"
+            ></i>
+            <i
+              class="pi pi-trash text-danger"
+              style="cursor: pointer"
+              (click)="delete(user.id)"
+            ></i>
           </td>
         </tr>
       </tbody>
@@ -60,24 +71,48 @@
   </div>
 
   <!-- User Dialog -->
-  <p-dialog header="{{ title ? 'Edit Company User' : 'Add Company User' }}" [(visible)]="isVisible"
-    (onHide)="hideDialog()" [modal]="true" [style]="{ width: '490px' }" [draggable]="false" [resizable]="false"
-    [dismissableMask]="true" [breakpoints]="{}" [styleClass]="'custom-dialog'">
+  <p-dialog
+    header="{{ title ? 'Edit Company User' : 'Add Company User' }}"
+    [(visible)]="isVisible"
+    (onHide)="hideDialog()"
+    [modal]="true"
+    [style]="{ width: '490px' }"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [breakpoints]="{}"
+    [styleClass]="'custom-dialog'"
+  >
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="row g-3 mb-3">
         <div class="col-md-6">
           <label for="name" class="form-label">Name</label>
-          <input id="name" formControlName="name" type="text" class="form-control" />
+          <input
+            id="name"
+            formControlName="name"
+            type="text"
+            class="form-control"
+          />
         </div>
 
         <div class="col-md-6">
           <label for="email" class="form-label">Email</label>
-          <input id="email" formControlName="email" type="email" class="form-control" />
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            class="form-control"
+          />
         </div>
 
         <div class="col-md-6">
           <label for="password" class="form-label">Password</label>
-          <input id="password" formControlName="password" type="password" class="form-control" />
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            class="form-control"
+          />
         </div>
 
         <div class="col-md-6">
@@ -88,14 +123,36 @@
           </select>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="isSuperAdmin && company_id">
           <label for="companyIdInput" class="form-label">Company ID</label>
-          <input id="companyIdInput" formControlName="companyId" type="number" class="form-control" />
+          <input
+            id="companyIdInput"
+            formControlName="companyId"
+            type="number"
+            class="form-control"
+          />
+        </div>
+        <div class="col-md-6" *ngIf="isSuperAdmin && !company_id">
+          <label for="companies" class="form-label">Companies</label>
+          <p-multiSelect
+            [options]="companies"
+            optionLabel="name"
+            [filter]="true"
+            filterBy="name"
+            optionValue="id"
+            formControlName="companies"
+            placeholder="Select Companies"
+          ></p-multiSelect>
         </div>
       </div>
       <p-footer class="dialog-footer">
         <div class="dialog-actions">
-          <button pButton type="submit" label="Save" class="p-button-success" [disabled]="userForm.invalid"></button>
+          <button
+            pButton
+            type="submit"
+            label="Save"
+            class="p-button-success"
+          ></button>
         </div>
       </p-footer>
     </form>

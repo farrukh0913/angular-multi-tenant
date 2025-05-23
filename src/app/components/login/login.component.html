@@ -1,6 +1,6 @@
 <form
   [formGroup]="loginForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="onDialog()"
   class="container mt-5 p-4 border rounded shadow-sm bg-light animate__animated animate__fadeInDown"
   style="max-width: 400px"
 >
@@ -33,33 +33,6 @@
     />
   </div>
 
-  <!-- Get Companies Button -->
-  <!-- <div
-    class="mb-3 animate__animated animate__fadeInUp animate__delay-1s"
-    *ngIf="!isAdmin"
-  >
-    <button
-      type="button"
-      class="btn btn-outline-primary w-100"
-      (click)="relatedCompanies()"
-    >
-      Get Companies
-    </button>
-  </div> -->
-
-  <!-- Company Dropdown -->
-  <div
-    class="mb-3 animate__animated animate__fadeInUp animate__delay-1s"
-    *ngIf="companies.length"
-  >
-    <label for="roleId" class="form-label">Select Company</label>
-    <select id="roleId" formControlName="companyId" class="form-select">
-      <option *ngFor="let company of companies" [value]="company.id">
-        {{ company.name }}
-      </option>
-    </select>
-  </div>
-
   <!-- Password Field -->
   <div class="mb-3 animate__animated animate__fadeInUp animate__delay-1s">
     <label for="password" class="form-label">Password</label>
@@ -80,3 +53,31 @@
     Submit
   </button>
 </form>
+
+<p-dialog
+  header="Select a Company"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '350px' }"
+>
+  <p-listbox
+    [options]="companies"
+    optionLabel="name"
+    [(ngModel)]="selectedCompany"
+    [filter]="true"
+  >
+  </p-listbox>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="OK"
+      icon="pi pi-check"
+      (click)="onSubmit()"
+      [disabled]="!selectedCompany"
+    ></button>
+  </ng-template>
+</p-dialog>

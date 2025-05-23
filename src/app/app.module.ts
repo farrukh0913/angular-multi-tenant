@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +10,8 @@ import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ListboxModule } from 'primeng/listbox';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CompaniesComponent } from './components/companies/companies.component';
@@ -31,7 +34,7 @@ import { DepartmentsComponent } from './components/departments/departments.compo
     LayoutComponent,
     MainInformationComponent,
     HomeComponent,
-    DepartmentsComponent
+    DepartmentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,11 +45,14 @@ import { DepartmentsComponent } from './components/departments/departments.compo
     DialogModule,
     ButtonModule,
     CardModule,
+    ListboxModule,
+    MultiSelectModule,
     ConfirmDialogModule,
     BrowserAnimationsModule,
     FormsModule,
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

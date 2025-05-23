@@ -63,6 +63,11 @@ export class MainInformationComponent {
           this.companyName = company?.name;
         },
       });
+    } else if (userId && !this.companyId) {
+      this.apiService.get(`users/${userId}`).subscribe((res: any) => {
+        this.user = [res];
+        this.permissions = this.user[0].privileges;
+      });
     }
   }
 

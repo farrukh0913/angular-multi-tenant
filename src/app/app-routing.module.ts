@@ -28,6 +28,10 @@ const routes: Routes = [
         path: 'companies/:companyId/user/:id',
         component: MainInformationComponent,
       },
+      {
+        path: 'userInfo/:id',
+        component: MainInformationComponent,
+      },
       { path: '**', redirectTo: 'home' },
     ],
   },

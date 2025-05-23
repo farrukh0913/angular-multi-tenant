@@ -17,6 +17,8 @@ export class LoginComponent {
   write_permission: boolean = true;
   companies: ICompany[] = [];
   isAdmin: boolean = false;
+  displayDialog: boolean = false;
+  selectedCompany!: any;
 
   constructor(
     private apiService: ApiService,
@@ -28,28 +30,37 @@ export class LoginComponent {
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      companyId: [0, [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
 
-  // relatedCompanies() {
-  //   if (this.loginForm?.value?.email) {
-  //     this.apiService.post("relatedCompanies", {email: this.loginForm.value.email}).subscribe({
-  //       next: response => {
-  //         this.companies = response;
-  //       },
-  //       error: err => {
-  //         this.toastService.showError('Error', err.error.error.message);
-  //         this.companies = [];
-  //       }
-  //     });
-  //   }
-  // }
+  relatedCompanies() {
+    if (this.loginForm?.value?.email) {
+      this.apiService
+        .post('relatedCompanies', { email: this.loginForm.value.email })
+        .subscribe({
+          next: (response) => {
+            this.companies = response;
+          },
+          error: (err) => {
+            this.toastService.showError('Error', err.error.error.message);
+            this.companies = [];
+          },
+        });
+    }
+  }
+
+  onDialog() {
+    if (this.isAdmin) {
+      this.onSubmit();
+    } else {
+      this.relatedCompanies();
+      this.displayDialog = true;
+    }
+  }
 
   onSubmit() {
     if (this.loginForm.value.email === 'sadmin') {
-      delete this.loginForm.value.companyId;
       this.apiService.post('user/login', this.loginForm.value).subscribe({
         next: (response) => {
           this.toastService.showSuccess('Login Successfull');
@@ -64,7 +75,12 @@ export class LoginComponent {
       });
     } else {
       if (this.loginForm.valid) {
-        const payload = { ...this.loginForm.value };
+        const payload = {
+          email: this.loginForm.value.email,
+          password: this.loginForm.value.password,
+          companyId: String(this.selectedCompany.id),
+        };
+
         this.apiService.post('company-users/login', payload).subscribe({
           next: (response) => {
             this.toastService.showSuccess('Login Successfull');

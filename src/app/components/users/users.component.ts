@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -38,7 +43,7 @@ export class UsersComponent {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -46,12 +51,20 @@ export class UsersComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       roleId: [0, [Validators.required]],
       companyId: [0, [Validators.required]],
+      companies: [[], Validators.required],
     });
-    if (!this.isSuperAdmin) this.getCompanyUsers();
+
+    // getting company id from params
+    this.company_id = this.route.snapshot.paramMap.get('id');
+    if (this.company_id) {
+      this.selectedCompany = this.company_id;
+      this.getCompanyUsers(this.selectedCompany);
+    }
+
     if (this.isSuperAdmin) {
-      this.apiService.get('companies').subscribe({
+      await this.apiService.get('companies').subscribe({
         next: (response) => {
-          this.companies = [{ name: 'Select Company', value: '' }, ...response];
+          this.companies = [...response];
           this.companies.forEach((company) => {
             if (Number(company.id) === Number(this.company_id)) {
               this.companyName = company.name;
@@ -62,13 +75,19 @@ export class UsersComponent {
           this.toastService.showError('Error', err.error.error.message);
         },
       });
+      if (!this.company_id) this.getUsers();
     }
-    // getting company id from params
-    this.company_id = this.route.snapshot.paramMap.get('id');
-    if (this.company_id) {
-      this.selectedCompany = this.company_id;
-      this.getCompanyUsers(this.selectedCompany);
-    }
+  }
+
+  getUsers() {
+    this.apiService.get('users').subscribe({
+      next: (response) => {
+        this.users = response.filter((res: any) => !(res.id == 1));
+      },
+      error(err) {
+        // this.toastService.showError('Error', err.error.error.message);
+      },
+    });
   }
 
   getCompanyUsers(Id?: string) {
@@ -89,12 +108,23 @@ export class UsersComponent {
   }
 
   getPermissionNames(ids: number[]): string[] {
-    return ids.map(
+    return ids?.map(
       (id) => PERMISSION_LIST.find((p) => p.id === id)?.name || ''
     );
   }
 
   onSubmit() {
+    if (this.companyName) {
+      const companiesControl = this.userForm.get('companies');
+      if (companiesControl) {
+        const companies = companiesControl.value || [];
+        companies.push(Number(this.company_id));
+        companiesControl.setValue(companies);
+        companiesControl.clearValidators();
+        companiesControl.updateValueAndValidity();
+      }
+    }
+
     if (this.userForm.invalid) {
       return;
     }
@@ -105,12 +135,12 @@ export class UsersComponent {
     this.userForm.value.companyId = Number(companyId);
     if (this.title === 'Edit') {
       payload.id = this.userId;
-      this.apiService.patch(`company-users/${companyId}`, payload).subscribe({
+      this.apiService.patch(`company-users`, payload).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user updated successfully');
           this.title = '';
           this.userForm.reset();
-          this.getCompanyUsers();
+          this.companyName ? this.getCompanyUsers() : this.getUsers();
           this.isVisible = false;
         },
         error: (err) => {
@@ -118,19 +148,17 @@ export class UsersComponent {
         },
       });
     } else {
-      this.apiService
-        .post('company-users', payload, { company_id: companyId })
-        .subscribe({
-          next: () => {
-            this.toastService.showSuccess('Company user added successfully');
-            this.userForm.reset();
-            this.getCompanyUsers();
-            this.isVisible = false;
-          },
-          error: (err) => {
-            this.toastService.showError('Error', err.error.error.message);
-          },
-        });
+      this.apiService.post('company-users', payload).subscribe({
+        next: (res) => {
+          this.toastService.showSuccess('Company user added successfully');
+          this.userForm.reset();
+          this.companyName ? this.getCompanyUsers() : this.getUsers();
+          this.isVisible = false;
+        },
+        error: (err) => {
+          this.toastService.showError('Error', err.error.error.message);
+        },
+      });
     }
   }
 
@@ -141,25 +169,33 @@ export class UsersComponent {
       const companyId = this.isSuperAdmin
         ? this.companyId
         : this.user.companyId;
-      this.apiService
-        .delete('company-users', { id: id, company_id: Number(companyId) })
-        .subscribe({
-          next: () => {
-            this.toastService.showSuccess('Company user deleted successfully');
-            this.getCompanyUsers();
-          },
-          error: (err) => {
-            this.toastService.showError('Error', err.error.error.message);
-          },
-        });
+      this.companyName
+        ? this.apiService
+            .delete('company-users', { id: id, company_id: Number(companyId) })
+            .subscribe({
+              next: () => {
+                this.toastService.showSuccess(
+                  'Company user deleted successfully'
+                );
+                this.getCompanyUsers();
+              },
+              error: (err) => {
+                this.toastService.showError('Error', err.error.error.message);
+              },
+            })
+        : this.apiService.delete(`users/${id}`).subscribe({
+            next: () => {
+              this.toastService.showSuccess('User deleted successfully');
+              this.getUsers();
+            },
+            error: (err) => {
+              this.toastService.showError('Error', err.error.error.message);
+            },
+          });
     }
   }
 
   showDialog(title?: string, user?: any) {
-    if (this.isSuperAdmin && !this.companyId) {
-      this.toastService.showError('Please select a company');
-      return;
-    }
     this.isVisible = true;
     this.userForm.patchValue({
       companyId: this.companyId,
@@ -187,6 +223,8 @@ export class UsersComponent {
 
   navigateTo(id: number | undefined) {
     const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
-    this.router.navigate([`companies/${companyId}/user/${id}`]);
+    this.companyName
+      ? this.router.navigate([`companies/${companyId}/user/${id}`])
+      : this.router.navigate([`userInfo/${id}`]);
   }
 }
