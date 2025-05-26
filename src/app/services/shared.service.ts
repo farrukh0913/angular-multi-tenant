@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
+  private showLiSubject = new BehaviorSubject<boolean>(false);
+  showLi$ = this.showLiSubject.asObservable();
+
   constructor(private confirmationService: ConfirmationService) {}
 
   deleteConfirm(text: string): Promise<boolean> {
@@ -24,5 +27,13 @@ export class SharedService {
         },
       });
     });
+  }
+
+  showLi() {
+    this.showLiSubject.next(true);
+  }
+
+  hideLi() {
+    this.showLiSubject.next(false);
   }
 }

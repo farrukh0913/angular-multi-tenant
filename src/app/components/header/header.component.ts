@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IUser } from 'src/app/constant/shared.interface';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -15,18 +16,20 @@ export class HeaderComponent {
   user: IUser | null = null;
   isSuperAdmin: boolean = false;
   permissions: number[] = [];
+  showLi: boolean | undefined;
 
-  constructor(private route: Router) {
+  constructor(private route: Router, private sharedService: SharedService) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
   }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user') || 'null');
     this.permissions = this.user?.privileges || [];
-    if (this.user && this.user.privileges && this.user.privileges.includes(4))
-      this.company_permission = true;
-    if (this.user && this.user.privileges && this.user.privileges.includes(3))
-      this.user_permission = true;
+
+    if (!this.isSuperAdmin)
+      this.sharedService.showLi$.subscribe((show) => {
+        this.showLi = show;
+      });
   }
 
   logOut() {

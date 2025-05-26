@@ -22,7 +22,7 @@
       </div>
       <div class="info-row">
         <strong>Company ID:</strong>
-        <span>{{ companyId }}</span>
+        <span>{{ companyId ? companyId : user[0].companyIds }}</span>
       </div>
       <div class="info-row">
         <strong>Role:</strong>

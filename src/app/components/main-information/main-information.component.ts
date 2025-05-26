@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from 'src/app/constant/shared.interface';
 import { ApiService } from 'src/app/services/api.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-main-information',
@@ -15,21 +16,20 @@ export class MainInformationComponent {
   isSuperAdmin: boolean = false;
   companyId!: string | null;
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private sharedService: SharedService
+  ) {
     const userId = this.route.snapshot.paramMap.get('id');
     this.companyId = this.route.snapshot.paramMap.get('companyId');
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
 
     if (userId && this.companyId) {
-      this.apiService
-        .get('company-users', {
-          id: userId,
-          company_id: Number(this.companyId),
-        })
-        .subscribe((data: IUser) => {
-          this.user = [data];
-          this.permissions = this.user[0].privileges;
-        });
+      this.apiService.get(`users/${userId}`).subscribe((res: any) => {
+        this.user = [res];
+        this.permissions = this.user[0].privileges;
+      });
 
       this.apiService.get('companies').subscribe({
         next: (companies) => {
@@ -41,28 +41,6 @@ export class MainInformationComponent {
           this.companyName = company?.name;
         },
       });
-    } else if (!this.isSuperAdmin) {
-      const user: IUser = JSON.parse(localStorage.getItem('user') || '{}');
-      const companyUserId = user.id;
-      const companyId = user.companyId;
-      this.companyId = String(user.companyId);
-      this.apiService
-        .get('company-users', {
-          id: companyUserId,
-          company_id: user.companyId,
-        })
-        .subscribe((data: IUser) => {
-          this.user = [data];
-          this.permissions = this.user[0].privileges;
-        });
-
-      this.apiService.get('companies').subscribe({
-        next: (companies) => {
-          const company =
-            companies?.find((c: { id: any }) => c.id === +companyId) ?? null;
-          this.companyName = company?.name;
-        },
-      });
     } else if (userId && !this.companyId) {
       this.apiService.get(`users/${userId}`).subscribe((res: any) => {
         this.user = [res];
@@ -71,5 +49,7 @@ export class MainInformationComponent {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sharedService.showLi();
+  }
 }

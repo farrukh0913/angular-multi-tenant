@@ -1,1 +1,10 @@
-<app-main-information *ngIf="!isSuperAdmin"></app-main-information>
+<div class="card-grid">
+  <p-card
+    header="Company"
+    class="finance-card"
+    *ngFor="let company of companies"
+    (click)="navigateTo(company.id)"
+  >
+    Name: {{ company.name }}<br />
+  </p-card>
+</div>

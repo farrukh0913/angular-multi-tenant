@@ -1,3 +1,44 @@
 .navbar-brand img {
   vertical-align: middle;
 }
+
+.card-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 20px;
+
+  grid-template-columns: 1fr;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  p-card {
+    display: block;
+  }
+
+  ::ng-deep .p-card {
+    border-radius: 8px;
+    overflow: hidden;
+
+    .p-card-header {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .p-card-body {
+      padding: 1rem;
+      color: #fff;
+    }
+  }
+
+  .finance-card {
+    ::ng-deep .p-card-body {
+      background-color: #2c3e50;
+    }
+  }
+}

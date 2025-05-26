@@ -31,6 +31,8 @@ export class UsersComponent {
   selectedCompany!: string;
   company_id!: string | null;
   companyName: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
 
   constructor(
     private apiService: ApiService,
@@ -92,13 +94,13 @@ export class UsersComponent {
 
   getCompanyUsers(Id?: string) {
     if (Id) this.companyId = Id;
-    const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
+    const companyId = this.isSuperAdmin ? this.companyId : this.user.companyId;
 
-    this.apiService.get('company-users', { id: Number(id) }).subscribe({
+    this.apiService.get(`companyUsers/${companyId}`).subscribe({
       next: (response) => {
         this.users = response;
         this.userForm.patchValue({
-          companyId: Number(id),
+          companyId: Number(companyId),
         });
       },
       error: (err) => {
@@ -118,24 +120,54 @@ export class UsersComponent {
       const companiesControl = this.userForm.get('companies');
       if (companiesControl) {
         const companies = companiesControl.value || [];
-        companies.push(Number(this.company_id));
-        companiesControl.setValue(companies);
+        if (!companies.includes(Number(this.company_id))) {
+          companies.push(Number(this.company_id));
+          companiesControl.setValue(companies);
+        }
         companiesControl.clearValidators();
         companiesControl.updateValueAndValidity();
       }
     }
 
-    if (this.userForm.invalid) {
-      return;
-    }
-    const payload = { ...this.userForm.value };
-    payload.roleId = Number(payload.roleId);
-    const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
-    const companyId = Number(id);
-    this.userForm.value.companyId = Number(companyId);
     if (this.title === 'Edit') {
-      payload.id = this.userId;
-      this.apiService.patch(`company-users`, payload).subscribe({
+      ['password', 'companyId', 'companies'].forEach((field) => {
+        const control = this.userForm.get(field);
+        control?.clearValidators();
+        control?.updateValueAndValidity();
+      });
+
+      const nameControl = this.userForm.get('name');
+      const emailControl = this.userForm.get('email');
+      const roleIdControl = this.userForm.get('roleId');
+
+      const controls = [nameControl, emailControl, roleIdControl];
+      let hasError = false;
+
+      controls.forEach((control) => {
+        if (control?.invalid) {
+          control.markAsTouched();
+          hasError = true;
+        }
+      });
+
+      if (hasError) {
+        return;
+      }
+    } else {
+      if (this.userForm.invalid) {
+        this.userForm.markAllAsTouched();
+        return;
+      }
+    }
+    let payload: any;
+
+    if (this.title === 'Edit') {
+      payload = {
+        name: this.userForm.get('name')?.value,
+        email: this.userForm.get('email')?.value,
+        roleId: Number(this.userForm.get('roleId')?.value),
+      };
+      this.apiService.patch('users', payload, { id: this.userId }).subscribe({
         next: () => {
           this.toastService.showSuccess('Company user updated successfully');
           this.title = '';
@@ -148,8 +180,13 @@ export class UsersComponent {
         },
       });
     } else {
+      payload = { ...this.userForm.value };
+      payload.roleId = Number(payload.roleId);
+      const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
+      payload.companyId = Number(id);
+
       this.apiService.post('company-users', payload).subscribe({
-        next: (res) => {
+        next: () => {
           this.toastService.showSuccess('Company user added successfully');
           this.userForm.reset();
           this.companyName ? this.getCompanyUsers() : this.getUsers();
@@ -166,33 +203,40 @@ export class UsersComponent {
     /** Confirmation */
     const resolved = await this.sharedService.deleteConfirm('user');
     if (resolved) {
-      const companyId = this.isSuperAdmin
-        ? this.companyId
-        : this.user.companyId;
-      this.companyName
-        ? this.apiService
-            .delete('company-users', { id: id, company_id: Number(companyId) })
-            .subscribe({
-              next: () => {
-                this.toastService.showSuccess(
-                  'Company user deleted successfully'
-                );
-                this.getCompanyUsers();
-              },
-              error: (err) => {
-                this.toastService.showError('Error', err.error.error.message);
-              },
-            })
-        : this.apiService.delete(`users/${id}`).subscribe({
-            next: () => {
-              this.toastService.showSuccess('User deleted successfully');
-              this.getUsers();
-            },
-            error: (err) => {
-              this.toastService.showError('Error', err.error.error.message);
-            },
-          });
+      this.apiService.delete(`users/${id}`).subscribe({
+        next: () => {
+          this.toastService.showSuccess('User deleted successfully');
+          this.companyName ? this.getCompanyUsers() : this.getUsers();
+        },
+        error: (err) => {
+          this.toastService.showError('Error', err.error.error.message);
+        },
+      });
     }
+  }
+
+  updatePassword() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.toastService.showError('Passwords do not match');
+      return;
+    }
+
+    const payload = {
+      email: this.userForm.get('email')?.value,
+      newPassword: this.newPassword,
+    };
+
+    this.apiService.patch('/users/password', payload).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Password updated successfully');
+        this.isVisible = false;
+        this.userForm.reset();
+        this.title = '';
+      },
+      error: (err) => {
+        this.toastService.showError(err.error.error.message);
+      },
+    });
   }
 
   showDialog(title?: string, user?: any) {
@@ -207,7 +251,6 @@ export class UsersComponent {
       this.userForm.patchValue({
         name: user.name,
         email: user.email,
-        password: user.password,
         roleId: user.roleId,
         companyId: this.companyId,
       });
