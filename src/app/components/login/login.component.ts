@@ -12,13 +12,6 @@ import { ICompany } from 'src/app/constant/shared.interface';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
-  showCompany: boolean = false;
-  showUser: boolean = false;
-  write_permission: boolean = true;
-  companies: ICompany[] = [];
-  isAdmin: boolean = false;
-  displayDialog: boolean = false;
-  selectedCompany!: any;
 
   constructor(
     private apiService: ApiService,
@@ -48,11 +41,5 @@ export class LoginComponent {
         this.toastService.showError('Error', err.error.error.message);
       },
     });
-  }
-
-  inputValue(event: any) {
-    event.target.value === 'sadmin'
-      ? (this.isAdmin = true)
-      : (this.isAdmin = false);
   }
 }

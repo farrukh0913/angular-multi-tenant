@@ -25,27 +25,21 @@ export class MainInformationComponent {
     this.companyId = this.route.snapshot.paramMap.get('companyId');
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
 
-    if (userId && this.companyId) {
-      this.apiService.get(`users/${userId}`).subscribe((res: any) => {
+    if (userId) {
+      this.apiService.get(`users/${userId}`).subscribe((res: IUser) => {
         this.user = [res];
-        this.permissions = this.user[0].privileges;
+        this.permissions = res.privileges;
       });
 
-      this.apiService.get('companies').subscribe({
-        next: (companies) => {
-          const companyIdNum = this.companyId ? +this.companyId : null;
+      if (this.companyId) {
+        const companyIdNum = +this.companyId;
+        this.apiService.get('companies').subscribe((companies) => {
           const company =
-            companies?.find(
-              (c: { id: any }) => companyIdNum !== null && c.id === companyIdNum
-            ) ?? null;
+            companies?.find((c: { id: number }) => c.id === companyIdNum) ??
+            null;
           this.companyName = company?.name;
-        },
-      });
-    } else if (userId && !this.companyId) {
-      this.apiService.get(`users/${userId}`).subscribe((res: any) => {
-        this.user = [res];
-        this.permissions = this.user[0].privileges;
-      });
+        });
+      }
     }
   }
 

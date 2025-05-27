@@ -9,10 +9,6 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  showCompany: boolean = false;
-  showUser: boolean = false;
-  company_permission: Boolean = false;
-  user_permission: Boolean = false;
   user: IUser | null = null;
   isSuperAdmin: boolean = false;
   permissions: number[] = [];
@@ -35,15 +31,5 @@ export class HeaderComponent {
   logOut() {
     localStorage.clear();
     this.route.navigate(['/login']);
-  }
-
-  toggleForm(name: string) {
-    if (name === 'company') {
-      this.showCompany = true;
-      this.showUser = false;
-    } else {
-      this.showUser = true;
-      this.showCompany = false;
-    }
   }
 }

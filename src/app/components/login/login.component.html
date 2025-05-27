@@ -29,7 +29,6 @@
       type="email"
       class="form-control"
       placeholder="Enter your username"
-      (input)="inputValue($event)"
     />
   </div>
 
@@ -53,31 +52,3 @@
     Submit
   </button>
 </form>
-
-<p-dialog
-  header="Select a Company"
-  [(visible)]="displayDialog"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [style]="{ width: '350px' }"
->
-  <p-listbox
-    [options]="companies"
-    optionLabel="name"
-    [(ngModel)]="selectedCompany"
-    [filter]="true"
-  >
-  </p-listbox>
-
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      label="OK"
-      icon="pi pi-check"
-      (click)="onSubmit()"
-      [disabled]="!selectedCompany"
-    ></button>
-  </ng-template>
-</p-dialog>

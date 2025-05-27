@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { IUser } from 'src/app/constant/shared.interface';
+import { ICompany, IUser } from 'src/app/constant/shared.interface';
 
 @Component({
   selector: 'app-departments',
@@ -18,7 +18,6 @@ export class DepartmentsComponent {
   constructor(
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private router: Router,
     private apiService: ApiService
   ) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
@@ -33,7 +32,7 @@ export class DepartmentsComponent {
       this.apiService.get('companies').subscribe({
         next: (response) => {
           const companies = response || [];
-          companies.forEach((company: any) => {
+          companies.forEach((company: ICompany) => {
             if (Number(company.id) === Number(this.user.companyId)) {
               this.companyName = company.name;
             }

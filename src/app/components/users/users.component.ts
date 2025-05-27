@@ -84,10 +84,10 @@ export class UsersComponent {
   getUsers() {
     this.apiService.get('users').subscribe({
       next: (response) => {
-        this.users = response.filter((res: any) => !(res.id == 1));
+        this.users = response.filter((res: IUser) => !(res.id == 1));
       },
-      error(err) {
-        // this.toastService.showError('Error', err.error.error.message);
+      error: (err) => {
+        this.toastService.showError(err.error.error.message);
       },
     });
   }
@@ -104,7 +104,7 @@ export class UsersComponent {
         });
       },
       error: (err) => {
-        this.toastService.showError('Error', err.error.error.message);
+        this.toastService.showError(err.error.error.message);
       },
     });
   }

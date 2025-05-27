@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
 import { ApiService } from 'src/app/services/api.service';
 import { SharedService } from 'src/app/services/shared.service';
