@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -12,13 +13,14 @@ export class HomeComponent {
   isSuperAdmin: boolean = false;
   user: IUser = {} as IUser;
   companies: ICompany[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor(private router: Router, private sharedService: SharedService) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
-    if (!this.isSuperAdmin) {
-      this.sharedService.hideLi();
-    }
-    this.user = this.sharedService.getUser();
+    this.sharedService.getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => this.user = user);
+
     if (!this.isSuperAdmin) {
       this.getRelatedCompanies();
     }
@@ -31,6 +33,7 @@ export class HomeComponent {
       this.sharedService.getRelatedCompanies(this.user.email).subscribe({
         next: (response) => {
           this.companies = response;
+          if (this.companies.length === 1) this.navigateTo(this.companies[0].id);
         },
       });
     }
@@ -38,6 +41,10 @@ export class HomeComponent {
 
   navigateTo(id: number | undefined) {
     this.router.navigate([`companies/${id}/user/${this.user.id}`]);
-    this.sharedService.showLi();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

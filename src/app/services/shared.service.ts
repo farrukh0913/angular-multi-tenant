@@ -3,14 +3,13 @@ import { ConfirmationService } from 'primeng/api';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { ToastService } from './toast.service';
-import { ICompany } from '../constant/shared.interface';
+import { ICompany, IUser } from '../constant/shared.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  private showLiSubject = new BehaviorSubject<boolean>(false);
-  showLi$ = this.showLiSubject.asObservable();
+  private userSubject = new BehaviorSubject<any>(null);
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -42,27 +41,24 @@ export class SharedService {
   }
 
   /**
-   * Shows the list item based on the current state.
-   * This method toggles the visibility of the list item.
+   * Add the current user by emitting a new value through the BehaviorSubject.
+   *
+   * @param user - The user object to be set as the current user.
    */
-  showLi() {
-    this.showLiSubject.next(true);
+  setUser(user: IUser) {
+    this.userSubject.next(user);
   }
 
   /**
-   * Hides the list item based on the current state.
-   * This method toggles the visibility of the list item.
-   */
-  hideLi() {
-    this.showLiSubject.next(false);
-  }
-
-  /**
-   * Retrieves the user information from local storage.
-   * @returns The user object parsed from local storage, or an empty object if not found.
+   * Retrieves the current user from localStorage and emits it via the BehaviorSubject.
+   * If a user is found in localStorage, it updates the `userSubject`.
+   *
+   * @returns Observable<IUser | null> - An observable of the current user.
    */
   getUser() {
-    return JSON.parse(localStorage.getItem('user') || '{}');
+    const getUser = JSON.parse(localStorage.getItem('user') || 'null');
+    if (getUser) this.userSubject.next(getUser);
+    return this.userSubject.asObservable();
   }
 
   /**

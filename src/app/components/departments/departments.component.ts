@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -13,6 +14,7 @@ export class DepartmentsComponent {
   companyName: string = '';
   department: string = '';
   user!: IUser;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +27,10 @@ export class DepartmentsComponent {
   }
 
   ngOnInit() {
-    this.user = this.sharedService.getUser();
+    this.sharedService.getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => this.user = user);
+
     if (!this.isSuperAdmin) {
       this.sharedService.getCompanies().subscribe({
         next: (response) => {
@@ -38,5 +43,10 @@ export class DepartmentsComponent {
         },
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

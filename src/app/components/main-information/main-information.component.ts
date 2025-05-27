@@ -29,6 +29,8 @@ export class MainInformationComponent {
       this.apiService.get(`users/${userId}`).subscribe((res: IUser) => {
         this.user = [res];
         this.permissions = res.privileges;
+        localStorage.setItem('user', JSON.stringify(this.user[0]));
+        this.sharedService.setUser(this.user[0]);
       });
 
       if (this.companyId) {
@@ -44,7 +46,5 @@ export class MainInformationComponent {
     }
   }
 
-  ngOnInit() {
-    this.sharedService.showLi();
-  }
+  ngOnInit() {}
 }

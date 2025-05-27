@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { IUser } from 'src/app/constant/shared.interface';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -13,22 +14,23 @@ export class HeaderComponent {
   isSuperAdmin: boolean = false;
   permissions: number[] = [];
   showLi: boolean | undefined;
+  private destroy$ = new Subject<void>();
 
   constructor(private route: Router, private sharedService: SharedService) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
   }
 
   ngOnInit() {
-    this.user = this.sharedService.getUser();
-    this.permissions = this.user?.privileges || [];
-
-    if (!this.isSuperAdmin)
-      this.sharedService.showLi$.subscribe((show) => {
-        this.showLi = show;
+    this.sharedService.getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.permissions = res?.privileges || [];
       });
   }
 
   logOut() {
+    this.destroy$.next();
+    this.destroy$.complete();
     localStorage.clear();
     this.route.navigate(['/login']);
   }

@@ -11,6 +11,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
 import { PERMISSION_LIST } from 'src/app/constant/permission';
 import { SharedService } from 'src/app/services/shared.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +34,7 @@ export class UsersComponent {
   companyName: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -46,7 +48,10 @@ export class UsersComponent {
   }
 
   async ngOnInit() {
-    this.user = this.sharedService.getUser();
+    this.sharedService.getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => this.user = user);
+
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -277,4 +282,10 @@ export class UsersComponent {
       ? this.router.navigate([`companies/${companyId}/user/${id}`])
       : this.router.navigate([`userInfo/${id}`]);
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }
