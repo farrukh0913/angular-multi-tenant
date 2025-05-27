@@ -19,7 +19,7 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('user') || 'null');
+    this.user = this.sharedService.getUser();
     this.permissions = this.user?.privileges || [];
 
     if (!this.isSuperAdmin)

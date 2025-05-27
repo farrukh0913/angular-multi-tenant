@@ -33,12 +33,9 @@ export class CompaniesComponent {
   }
 
   getCompanies() {
-    this.apiService.get('companies').subscribe({
+    this.sharedService.getCompanies().subscribe({
       next: (response) => {
         this.companies = response;
-      },
-      error: (err) => {
-        this.toastService.showError('Error', err.error.error.message);
       },
     });
   }

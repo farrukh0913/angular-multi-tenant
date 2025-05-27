@@ -46,7 +46,7 @@ export class UsersComponent {
   }
 
   async ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = this.sharedService.getUser();
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -64,7 +64,7 @@ export class UsersComponent {
     }
 
     if (this.isSuperAdmin) {
-      await this.apiService.get('companies').subscribe({
+      this.sharedService.getCompanies().subscribe({
         next: (response) => {
           this.companies = [...response];
           this.companies.forEach((company) => {
@@ -72,9 +72,6 @@ export class UsersComponent {
               this.companyName = company.name;
             }
           });
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err.error.error.message);
         },
       });
       if (!this.company_id) this.getUsers();
@@ -199,19 +196,29 @@ export class UsersComponent {
     }
   }
 
-  async delete(id: number | undefined) {
+  async delete(id: number | undefined, companyId?: string) {
     /** Confirmation */
     const resolved = await this.sharedService.deleteConfirm('user');
     if (resolved) {
-      this.apiService.delete(`users/${id}`).subscribe({
-        next: () => {
-          this.toastService.showSuccess('User deleted successfully');
-          this.companyName ? this.getCompanyUsers() : this.getUsers();
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err.error.error.message);
-        },
-      });
+      companyId
+        ? this.apiService.delete(`company-users/${id}/${companyId}`).subscribe({
+            next: () => {
+              this.toastService.showSuccess('User deleted successfully');
+              this.getCompanyUsers();
+            },
+            error: (err) => {
+              this.toastService.showError('Error', err.error.error.message);
+            },
+          })
+        : this.apiService.delete(`users/${id}`).subscribe({
+            next: () => {
+              this.toastService.showSuccess('User deleted successfully');
+              this.getUsers();
+            },
+            error: (err) => {
+              this.toastService.showError('Error', err.error.error.message);
+            },
+          });
     }
   }
 

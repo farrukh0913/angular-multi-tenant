@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ActivatedRoute } from '@angular/router';
 import { ICompany, IUser } from 'src/app/constant/shared.interface';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-departments',
@@ -17,8 +16,7 @@ export class DepartmentsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private toastService: ToastService,
-    private apiService: ApiService
+    private sharedService: SharedService
   ) {
     this.isSuperAdmin = Boolean(localStorage.getItem('isSuperAdmin'));
     this.route.queryParams.subscribe((params: any) => {
@@ -27,9 +25,9 @@ export class DepartmentsComponent {
   }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = this.sharedService.getUser();
     if (!this.isSuperAdmin) {
-      this.apiService.get('companies').subscribe({
+      this.sharedService.getCompanies().subscribe({
         next: (response) => {
           const companies = response || [];
           companies.forEach((company: ICompany) => {
@@ -37,9 +35,6 @@ export class DepartmentsComponent {
               this.companyName = company.name;
             }
           });
-        },
-        error: (err) => {
-          this.toastService.showError('Error', err);
         },
       });
     }

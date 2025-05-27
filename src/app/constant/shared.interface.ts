@@ -12,4 +12,5 @@ export interface IUser {
   roleId: number;
   privileges: number[];
   companyIds?: number[];
+  userCompanies?: any;
 }

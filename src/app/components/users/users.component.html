@@ -62,7 +62,14 @@
             <i
               class="pi pi-trash text-danger"
               style="cursor: pointer"
-              (click)="delete(user.id)"
+              (click)="
+                delete(
+                  user.id,
+                  user?.userCompanies?.length
+                    ? user.userCompanies[0].companyId
+                    : null
+                )
+              "
             ></i>
           </td>
         </tr>

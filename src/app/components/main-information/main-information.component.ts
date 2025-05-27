@@ -33,11 +33,12 @@ export class MainInformationComponent {
 
       if (this.companyId) {
         const companyIdNum = +this.companyId;
-        this.apiService.get('companies').subscribe((companies) => {
-          const company =
-            companies?.find((c: { id: number }) => c.id === companyIdNum) ??
-            null;
-          this.companyName = company?.name;
+        this.sharedService.getCompanies().subscribe({
+          next: (response) => {
+            const company =
+              response?.find((c) => c.id === companyIdNum) ?? null;
+            this.companyName = company?.name || '';
+          },
         });
       }
     }
