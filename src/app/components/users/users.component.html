@@ -16,7 +16,8 @@
 
   <div class="d-flex justify-content-end align-items-center mt-4 mb-4">
     <button class="btn btn-primary rounded-pill px-4" (click)="showDialog()">
-      <i class="bi bi-plus-circle me-2"></i> Add Company User
+      <i class="bi bi-plus-circle me-2"></i>
+      {{ titlePart === "Global" ? "Add Global User" : "Add Company User" }}
     </button>
   </div>
 
@@ -32,6 +33,7 @@
           <th>Email</th>
           <th>Role</th>
           <th>Permissions</th>
+          <th *ngIf="titlePart === 'Global'">Companies</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -45,6 +47,11 @@
             <ng-container
               *ngFor="let name of getPermissionNames(user.privileges)"
             >
+              <span class="badge bg-primary me-1">{{ name }}</span>
+            </ng-container>
+          </td>
+          <td *ngIf="titlePart === 'Global'">
+            <ng-container *ngFor="let name of getComapnyNames(user.companyIds)">
               <span class="badge bg-primary me-1">{{ name }}</span>
             </ng-container>
           </td>
@@ -79,7 +86,9 @@
 
   <!-- User Dialog -->
   <p-dialog
-    header="{{ title ? 'Edit Company User' : 'Add Company User' }}"
+    header="{{
+      title ? 'Edit ' + titlePart + ' User' : 'Add ' + titlePart + ' User'
+    }}"
     [(visible)]="isVisible"
     (onHide)="hideDialog()"
     [modal]="true"

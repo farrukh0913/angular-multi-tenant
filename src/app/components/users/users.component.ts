@@ -35,6 +35,7 @@ export class UsersComponent {
   newPassword: string = '';
   confirmPassword: string = '';
   private destroy$ = new Subject<void>();
+  titlePart: string = 'Company';
 
   constructor(
     private apiService: ApiService,
@@ -48,9 +49,10 @@ export class UsersComponent {
   }
 
   async ngOnInit() {
-    this.sharedService.getUser()
+    this.sharedService
+      .getUser()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(user => this.user = user);
+      .subscribe((user) => (this.user = user));
 
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -80,6 +82,9 @@ export class UsersComponent {
         },
       });
       if (!this.company_id) this.getUsers();
+    }
+    if (this.router.url === '/users') {
+      this.titlePart = 'Global';
     }
   }
 
@@ -114,6 +119,12 @@ export class UsersComponent {
   getPermissionNames(ids: number[]): string[] {
     return ids?.map(
       (id) => PERMISSION_LIST.find((p) => p.id === id)?.name || ''
+    );
+  }
+
+  getComapnyNames(ids: number[] | undefined): string[] | undefined {
+    return ids?.map(
+      (id) => this.companies.find((p) => p.id === id)?.name || ''
     );
   }
 
@@ -184,6 +195,7 @@ export class UsersComponent {
     } else {
       payload = { ...this.userForm.value };
       payload.roleId = Number(payload.roleId);
+      if (this.titlePart === 'Global') payload.globalUser = 1;
       const id = this.isSuperAdmin ? this.companyId : this.user.companyId;
       payload.companyId = Number(id);
 
@@ -287,5 +299,4 @@ export class UsersComponent {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }
